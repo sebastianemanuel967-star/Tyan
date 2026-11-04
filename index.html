@@ -97,8 +97,8 @@
     /* Scroll Reveal Cinematográfico (Intersection Observer) */
     .scroll-reveal {
       opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1), transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      transform: translateY(20px);
+      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
       will-change: opacity, transform;
     }
     .scroll-reveal.revealed {
@@ -106,7 +106,7 @@
       transform: translateY(0);
     }
 
-    /* Efecto de ruido de fondo ultra sutil para textura editorial */
+    /* Textura editorial ultra sutil */
     .bg-noise {
       background-image: radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
       background-size: 24px 24px;
@@ -119,15 +119,43 @@
 
 <body class="bg-alabaster text-obsidian dark:bg-darkBg dark:text-darkText font-sans antialiased transition-colors duration-500 selection:bg-bronze selection:text-alabaster min-h-screen flex flex-col justify-between relative bg-noise overflow-x-hidden">
 
+  <!-- ==================== NOTIFICACIÓN FLOTANTE AUTOMÁTICA (POPUP DE PREGUNTAS) ==================== -->
+  <aside id="floatingQuestionToast" 
+    class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-6 sm:bottom-6 sm:max-w-sm z-50 transform translate-y-24 opacity-0 pointer-events-none transition-all duration-700 ease-out"
+    aria-live="polite">
+    <div class="relative bg-stoneSoft/95 dark:bg-[#141414]/95 backdrop-blur-md border border-obsidian/[0.15] dark:border-accentGold/30 p-3.5 sm:p-4 shadow-2xl rounded-sm flex items-start gap-3">
+      <!-- Icono / Punto brillante con pulso -->
+      <div class="shrink-0 mt-0.5 relative flex items-center justify-center">
+        <span class="w-2.5 h-2.5 rounded-full bg-accentGold block animate-ping absolute inset-0 opacity-75"></span>
+        <span class="w-2.5 h-2.5 rounded-full bg-accentGold block relative"></span>
+      </div>
+
+      <!-- Contenido textual directo -->
+      <div class="flex-1 min-w-0 pr-4">
+        <p class="font-serif text-sm sm:text-base text-obsidian dark:text-darkText font-normal leading-snug">
+          ¿Tienes una duda o dilema existencial?
+        </p>
+        <button onclick="scrollToQuestions()" class="mt-2 inline-flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-luxury text-bronze dark:text-accentGold hover:underline font-semibold group">
+          <span>ENVÍA TU PREGUNTA &nearr;</span>
+        </button>
+      </div>
+
+      <!-- Botón de Cerrar (X discreta) -->
+      <button onclick="dismissFloatingToast()" aria-label="Cerrar notificación" class="absolute top-2.5 right-2.5 text-taupe dark:text-darkMuted hover:text-obsidian dark:hover:text-darkText transition-colors p-1">
+        <i data-lucide="x" class="w-3.5 h-3.5"></i>
+      </button>
+    </div>
+  </aside>
+
   <!-- ==================== HEADER / NAVEGACIÓN MINIMALISTA ==================== -->
   <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-alabaster/90 dark:bg-darkBg/90 border-b border-obsidian/[0.08] dark:border-darkBorder transition-colors duration-500 relative">
     
-    <!-- LÍNEA INDICADORA DE LECTURA SUPERIOR (PROGRESS BAR EN COLOR BRONCE) -->
+    <!-- LÍNEA INDICADORA DE LECTURA SUPERIOR -->
     <div id="readingProgressBar" class="absolute top-0 left-0 h-[2px] bg-bronze dark:bg-accentGold w-0 transition-all duration-75 ease-out z-50 pointer-events-none"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 h-16 sm:h-20 flex items-center justify-between">
       
-      <!-- Logo Minimalista de Revista -->
+      <!-- Identidad Tipográfica -->
       <a href="#" class="group flex flex-col max-w-[200px] xs:max-w-none">
         <span class="font-serif text-lg sm:text-2xl tracking-[0.2em] sm:tracking-[0.25em] font-medium uppercase text-obsidian dark:text-darkText transition-colors truncate">
           SEBASTIÁN MENA
@@ -137,7 +165,7 @@
         </span>
       </a>
 
-      <!-- Menú Desktop: Reemplazado Obras por Preguntas -->
+      <!-- Menú Desktop -->
       <nav class="hidden md:flex items-center space-x-8 lg:space-x-10 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted font-medium">
         <a href="#episodios" class="hover:text-obsidian dark:hover:text-darkText transition-colors duration-300">Episodios</a>
         <a href="#quien-soy" class="hover:text-obsidian dark:hover:text-darkText transition-colors duration-300">Quién Soy</a>
@@ -145,15 +173,15 @@
         <a href="#carta-privada" class="hover:text-obsidian dark:hover:text-darkText transition-colors duration-300">Carta Privada</a>
       </nav>
 
-      <!-- Acciones de Cabecera (Modo Oscuro / Botón Menú Móvil) -->
+      <!-- Acciones de Cabecera -->
       <div class="flex items-center space-x-2 sm:space-x-3">
-        <!-- Botón Toggle Modo Oscuro -->
+        <!-- Toggle Modo Oscuro -->
         <button id="themeToggleBtn" aria-label="Cambiar tema visual" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-taupe dark:text-darkMuted hover:text-obsidian dark:hover:text-darkText transition-colors border border-obsidian/[0.1] dark:border-darkBorder">
           <i data-lucide="moon" class="w-4 h-4 hidden dark:block"></i>
           <i data-lucide="sun" class="w-4 h-4 block dark:hidden"></i>
         </button>
 
-        <!-- Botón Menú Móvil (Hamburguesa Minimalista) -->
+        <!-- Botón Menú Móvil -->
         <button id="mobileMenuBtn" aria-label="Abrir menú" class="md:hidden w-9 h-9 flex items-center justify-center rounded-full text-obsidian dark:text-darkText border border-obsidian/[0.1] dark:border-darkBorder">
           <i data-lucide="menu" class="w-4 h-4"></i>
         </button>
@@ -162,7 +190,7 @@
     </div>
   </header>
 
-  <!-- ==================== MENÚ MÓVIL FULL-SCREEN EDITORIAL CON ENLACES DIRECTOS ==================== -->
+  <!-- ==================== MENÚ MÓVIL FULL-SCREEN EDITORIAL ==================== -->
   <div id="mobileMenuOverlay" class="fixed inset-0 bg-[#0C0C0C]/98 backdrop-blur-xl z-50 flex flex-col justify-between p-6 sm:p-10 transition-all duration-500 opacity-0 pointer-events-none translate-y-4">
     <!-- Barra superior del overlay -->
     <div class="flex items-center justify-between border-b border-white/10 pb-5">
@@ -175,7 +203,7 @@
       </button>
     </div>
 
-    <!-- Enlaces centrales en tipografía Serif grande (Obras reemplazado por Preguntas) -->
+    <!-- Enlaces centrales -->
     <nav class="flex flex-col items-center justify-center space-y-7 my-auto text-center">
       <a href="#episodios" class="mobile-nav-link font-serif text-3xl sm:text-4xl text-white/90 hover:text-accentGold tracking-widest uppercase transition-colors">Episodios</a>
       <a href="#quien-soy" class="mobile-nav-link font-serif text-3xl sm:text-4xl text-white/90 hover:text-accentGold tracking-widest uppercase transition-colors">Quién Soy</a>
@@ -183,10 +211,10 @@
       <a href="#carta-privada" class="mobile-nav-link font-serif text-3xl sm:text-4xl text-white/90 hover:text-accentGold tracking-widest uppercase transition-colors">Carta Privada</a>
     </nav>
 
-    <!-- Pie del overlay móvil con los 3 enlaces directos oficiales -->
+    <!-- Pie del overlay móvil -->
     <div class="border-t border-white/10 pt-5 space-y-3">
-      <div class="flex items-center justify-between text-[9px] tracking-luxury uppercase text-white/50">
-        <span>ESCUCHAR EN TU PLATAFORMA</span>
+      <div class="flex items-center justify-between text-[9px] tracking-luxury uppercase text-white/50 font-mono">
+        <span>ESCUCHAR EN PLATAFORMAS</span>
         <span class="font-serif italic text-xs lowercase text-white/40">temporada 2026</span>
       </div>
 
@@ -210,290 +238,101 @@
   <!-- ==================== CONTENIDO PRINCIPAL ==================== -->
   <main class="flex-grow">
 
-    <!-- ==================== 1. HERO SECTION (ENFOQUE TOTAL A TRÁFICO & MONETIZACIÓN) ==================== -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 min-h-[90vh] lg:min-h-0 flex flex-col justify-between pt-6 pb-6 sm:pt-20 sm:pb-24 border-b border-obsidian/[0.08] dark:border-darkBorder">
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-center flex-grow">
-        
-        <!-- Columna Editorial (Texto & Concepto) -->
-        <div class="lg:col-span-7 flex flex-col justify-center space-y-5 sm:space-y-8">
-          
-          <!-- Bloque Superior: Etiqueta + Titular -->
-          <div>
-            <!-- Etiqueta de Identidad -->
-            <div class="flex items-center space-x-3 mb-3 sm:mb-4">
-              <span class="w-6 sm:w-8 h-[1px] bg-bronze dark:bg-accentGold"></span>
-              <span class="text-[10px] sm:text-xs uppercase tracking-editorial text-bronze dark:text-accentGold font-medium">
-                LA OTRA CARA CON TYAN &mdash; TEMPORADA 2026
-              </span>
-            </div>
-
-            <!-- Titular Principal Responsivo Mobile-First -->
-            <h1 class="font-serif text-3xl xs:text-4xl sm:text-5xl md:text-6xl xl:text-7xl font-normal leading-[1.14] sm:leading-[1.08] tracking-tight text-obsidian dark:text-darkText">
-              No venimos a ser un <em class="italic font-normal text-bronze dark:text-accentGold">parche</em>, venimos a ser la <em class="italic font-normal text-bronze dark:text-accentGold">cura</em>.
-            </h1>
-          </div>
-
-          <!-- MÓVIL EXCLUSIVO: Carátula Central Protagonista (Abre Spotify directamente) -->
-          <div class="lg:hidden my-2 flex flex-col items-center">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="relative w-full max-w-[270px] xs:max-w-[290px] aspect-square border border-neutral-800 p-2 bg-stoneSoft/30 dark:bg-darkCard/40 shadow-2xl transition-colors block group cursor-pointer">
-              <div class="relative w-full h-full overflow-hidden bg-neutral-950">
-                <img 
-                  src="portada-la-otra-cara.jpg" 
-                  alt="Portada oficial del podcast La Otra Cara con Tyan" 
-                  class="w-full h-full object-cover group-active:scale-105 transition-transform duration-500 ease-out"
-                  onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop'"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-                
-                <!-- Botón Play sobre la portada en móvil que enlaza a Spotify -->
-                <div class="absolute inset-0 flex items-center justify-center">
-                  <div class="w-13 h-13 rounded-full bg-obsidian/85 text-alabaster dark:bg-darkText dark:text-obsidian p-3.5 shadow-2xl backdrop-blur-sm group-hover:scale-110 transition-transform">
-                    <i data-lucide="headphones" class="w-6 h-6 text-accentGold"></i>
-                  </div>
-                </div>
-
-                <!-- Tarjeta de Nueva Emisión -->
-                <div class="absolute bottom-2.5 left-2.5 right-2.5 text-white">
-                  <div class="flex items-center space-x-1.5 text-[9px] uppercase tracking-luxury text-accentGold mb-0.5">
-                    <span class="w-1.5 h-1.5 rounded-full bg-accentGold animate-pulse"></span>
-                    <span>&bull; NUEVA EMISIÓN &mdash; EP. 08</span>
-                  </div>
-                  <p class="font-serif text-xs font-light italic leading-snug line-clamp-1">
-                    "Recuerda que vas a morir: El remedio contra el ego"
-                  </p>
-                </div>
-              </div>
-            </a>
-          </div>
-
-          <!-- Párrafo Descriptivo -->
-          <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted font-light leading-relaxed max-w-xl">
-            Un refugio auditivo minucioso con un toque de crudeza y realidad. Si Sebastián duda o cae en la pereza, Tyan toma el micrófono para hacer y decir las cosas como son: reflexiones en solitario y charlas sin filtro con invitados sobre una vida que no tiene un solo fin, sino muchos finales.
-          </p>
-
-          <!-- Cita Explicativa de la Dualidad -->
-          <div class="border-l-2 border-bronze/60 dark:border-accentGold/60 pl-3.5 sm:pl-4 py-1.5 bg-stoneSoft/40 dark:bg-darkCard/40 max-w-xl">
-            <p class="text-xs sm:text-sm italic font-serif text-obsidian/90 dark:text-darkText/90 leading-snug">
-              <strong class="font-sans not-italic font-semibold text-[9px] sm:text-[10px] tracking-luxury uppercase text-bronze dark:text-accentGold block mb-1">LA DUALIDAD:</strong>
-              Sebastián Mena escribe desde el silencio; Tyan comunica desde la acción. Es Sebastián sin pereza, frente a la verdad.
-            </p>
-          </div>
-
-          <!-- Botones de Acción (Directos a Plataformas Oficiales) -->
-          <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4 pt-1 sm:pt-2">
-            <!-- Botón Principal: Escuchar en Spotify -->
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center space-x-3 bg-obsidian dark:bg-darkText text-alabaster dark:text-obsidian px-6 sm:px-7 py-4 text-xs uppercase tracking-luxury font-medium hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all duration-300 group shadow-sm">
-              <span>ESCUCHAR EN SPOTIFY &nearr;</span>
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold transition-transform group-hover:scale-110"></i>
-            </a>
-
-            <!-- Botón Secundario: Apple Podcasts -->
-            <a href="https://podcasts.apple.com/us/podcast/la-otra-cara/id6828563966" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2.5 px-6 py-4 text-xs uppercase tracking-luxury font-medium border border-neutral-700 hover:border-bronze dark:border-neutral-700 dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all group">
-              <i data-lucide="podcast" class="w-4 h-4 text-bronze dark:text-accentGold transition-transform group-hover:scale-110"></i>
-              <span>APPLE PODCASTS &nearr;</span>
-            </a>
-
-            <!-- Enlace Explorar Archivo (Desktop) -->
-            <a href="#episodios" class="hidden sm:inline-flex items-center justify-start space-x-2 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted hover:text-obsidian dark:hover:text-darkText transition-colors py-2">
-              <span>Explorar catálogo</span>
-              <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
-            </a>
-          </div>
-
-          <!-- Barra de Plataformas en el Hero -->
-          <div class="pt-5 sm:pt-8 border-t border-obsidian/[0.08] dark:border-darkBorder/60 flex flex-wrap items-center gap-2.5 sm:gap-3.5 text-xs tracking-editorial uppercase">
-            <span class="text-[9px] sm:text-[10px] text-bronze dark:text-accentGold font-semibold tracking-luxury w-full xs:w-auto uppercase">
-              DISPONIBLE EN:
-            </span>
-            
-            <!-- Spotify ↗ -->
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-2 border border-obsidian/[0.12] dark:border-darkBorder rounded-full bg-stoneSoft/40 dark:bg-darkCard/40 text-obsidian dark:text-darkText hover:border-[#9A8468] hover:text-[#9A8468] dark:hover:border-accentGold dark:hover:text-accentGold transition-colors font-mono text-[10px] sm:text-xs">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
-              <span>SPOTIFY &nearr;</span>
-            </a>
-
-            <!-- Apple Podcasts ↗ -->
-            <a href="https://podcasts.apple.com/us/podcast/la-otra-cara/id6828563966" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-2 border border-obsidian/[0.12] dark:border-darkBorder rounded-full bg-stoneSoft/40 dark:bg-darkCard/40 text-obsidian dark:text-darkText hover:border-[#9A8468] hover:text-[#9A8468] dark:hover:border-accentGold dark:hover:text-accentGold transition-colors font-mono text-[10px] sm:text-xs">
-              <i data-lucide="podcast" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
-              <span>APPLE PODCASTS &nearr;</span>
-            </a>
-
-            <!-- YouTube ↗ -->
-            <a href="https://www.youtube.com/@Tyanmena" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3.5 py-2 border border-obsidian/[0.12] dark:border-darkBorder rounded-full bg-stoneSoft/40 dark:bg-darkCard/40 text-obsidian dark:text-darkText hover:border-[#9A8468] hover:text-[#9A8468] dark:hover:border-accentGold dark:hover:text-accentGold transition-colors font-mono text-[10px] sm:text-xs">
-              <i data-lucide="youtube" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
-              <span>YOUTUBE &nearr;</span>
-            </a>
-          </div>
-
-        </div>
-
-        <!-- Columna Visual Desktop: Portada Oficial a Todo Color (Abre Spotify con 1 clic) -->
-        <div class="hidden lg:block lg:col-span-5 relative w-full">
-          <div class="relative mx-auto max-w-sm lg:max-w-none">
-            
-            <!-- Marco estilo carátula de vinilo de colección a todo color -->
-            <div class="border border-neutral-800 p-3 bg-stoneSoft/30 dark:bg-darkCard/40 shadow-2xl transition-colors">
-              <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="relative overflow-hidden aspect-square bg-neutral-950 group block cursor-pointer" title="Escuchar La Otra Cara con Tyan en Spotify">
-                <!-- Portada oficial a todo color -->
-                <img 
-                  src="portada-la-otra-cara.jpg" 
-                  alt="Portada oficial del podcast La Otra Cara con Tyan" 
-                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                  onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop'"
-                />
-                <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
-                
-                <!-- Botón de acceso directo sobre la portada en hover -->
-                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div class="w-16 h-16 rounded-full bg-obsidian/90 text-alabaster dark:bg-darkText dark:text-obsidian flex items-center justify-center shadow-2xl backdrop-blur-sm transform group-hover:scale-110 transition-transform">
-                    <i data-lucide="headphones" class="w-7 h-7 text-accentGold"></i>
-                  </div>
-                </div>
-
-                <!-- Tarjeta de Nueva Emisión superpuesta en la parte inferior -->
-                <div class="absolute bottom-5 left-5 right-5 text-white">
-                  <div class="flex items-center space-x-2 text-[10px] uppercase tracking-luxury text-accentGold mb-1">
-                    <span class="w-2 h-2 rounded-full bg-accentGold animate-pulse"></span>
-                    <span>&bull; NUEVA EMISIÓN &mdash; EP. 08</span>
-                  </div>
-                  <p class="font-serif text-lg lg:text-xl font-light italic leading-snug">
-                    "Recuerda que vas a morir: El remedio contra el ego (Eclesiastés)"
-                  </p>
-                  <p class="text-[10px] text-white/70 tracking-widest uppercase mt-1">10:02 Min &middot; Filosofía &amp; Realidad</p>
-                </div>
-              </a>
-            </div>
-
-            <!-- Recuadro flotante "NOTA AL MARGEN" -->
-            <div class="absolute -bottom-8 -left-6 bg-alabaster dark:bg-darkBg border border-obsidian/[0.1] dark:border-darkBorder p-5 shadow-xl max-w-[280px]">
-              <span class="block text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-semibold">Nota al margen</span>
-              <p class="font-serif text-sm italic text-obsidian dark:text-darkText mt-1 leading-snug">
-                "El ser humano tiene una sola debilidad: sabe que se va a morir, pero no actúa como si fuera a morir."
-              </p>
-            </div>
-
-          </div>
-        </div>
-
+    <!-- ==================== 1. HERO SECTION (SIMPLIFICACIÓN EXTREMA Y DIRECTA) ==================== -->
+    <section class="max-w-5xl mx-auto px-4 sm:px-8 py-10 sm:py-16 md:py-20 flex flex-col items-center text-center border-b border-obsidian/[0.08] dark:border-darkBorder">
+      
+      <!-- 1. ETIQUETA SUPERIOR -->
+      <div class="inline-flex items-center space-x-2.5 sm:space-x-3 mb-4 sm:mb-6">
+        <span class="w-5 sm:w-8 h-[1px] bg-bronze dark:bg-accentGold"></span>
+        <span class="text-[10px] sm:text-xs uppercase tracking-editorial text-bronze dark:text-accentGold font-medium">
+          LA OTRA CARA CON TYAN &mdash; TEMPORADA 2026
+        </span>
+        <span class="w-5 sm:w-8 h-[1px] bg-bronze dark:bg-accentGold"></span>
       </div>
 
-      <!-- Indicador animado móvil de scroll (DESLIZAR PARA EXPLORAR ↓) -->
-      <div class="lg:hidden flex items-center justify-center pt-6 pb-2 text-taupe dark:text-darkMuted text-[10px] tracking-editorial uppercase animate-bounce">
-        <a href="#episodios" class="inline-flex items-center gap-1.5 hover:text-bronze dark:hover:text-accentGold transition-colors">
-          <span>DESLIZAR PARA EXPLORAR</span>
-          <i data-lucide="arrow-down" class="w-3.5 h-3.5"></i>
+      <!-- 2. TITULAR PRINCIPAL GRANDE -->
+      <h1 class="font-serif text-3xl xs:text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-normal leading-[1.12] sm:leading-[1.08] tracking-tight text-obsidian dark:text-darkText max-w-4xl mx-auto mb-7 sm:mb-9">
+        No venimos a ser un <em class="italic font-normal text-bronze dark:text-accentGold">parche</em>, venimos a ser la <em class="italic font-normal text-bronze dark:text-accentGold">cura</em>.
+      </h1>
+
+      <!-- 3. PORTADA CUADRADA A COLOR DEL PODCAST (ACCESO DIRECTO A SPOTIFY) -->
+      <div class="relative w-56 xs:w-64 sm:w-72 md:w-80 aspect-square mx-auto mb-7 sm:mb-9 border border-neutral-800 p-2 sm:p-2.5 bg-stoneSoft/30 dark:bg-darkCard/40 shadow-2xl group transition-all">
+        <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="relative block w-full h-full overflow-hidden bg-neutral-950" title="Escuchar La Otra Cara con Tyan en Spotify">
+          <img 
+            src="portada-la-otra-cara.jpg" 
+            alt="Portada oficial del podcast La Otra Cara con Tyan" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+            onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop'"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-black/20 to-transparent"></div>
+          
+          <!-- Botón Headphones en hover / tap -->
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-full bg-obsidian/90 text-alabaster dark:bg-darkText dark:text-obsidian flex items-center justify-center shadow-xl backdrop-blur-sm group-hover:scale-110 transition-transform">
+              <i data-lucide="headphones" class="w-6 h-6 text-accentGold"></i>
+            </div>
+          </div>
+
+          <!-- Píldora de última emisión -->
+          <div class="absolute bottom-3 left-3 right-3 text-center text-white">
+            <span class="text-[9px] uppercase tracking-luxury text-accentGold font-mono block">NUEVA EMISIÓN &middot; EP. 08</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- 4. LOS 3 BOTONES DIRECTOS PRINCIPALES Y LIMPIOS (PÍLDORAS TÁCTILES HORIZONTALES) -->
+      <div class="flex flex-wrap items-center justify-center gap-2.5 sm:gap-4 w-full max-w-lg mx-auto">
+        <!-- Spotify -->
+        <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="flex-1 min-w-[125px] sm:min-w-0 inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-3.5 border border-obsidian dark:border-darkBorder bg-obsidian text-alabaster dark:bg-darkCard dark:text-darkText hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold transition-all rounded-sm font-mono text-[11px] sm:text-xs uppercase tracking-luxury shadow-sm">
+          <i data-lucide="disc" class="w-4 h-4 text-accentGold shrink-0"></i>
+          <span class="font-medium">Spotify &nearr;</span>
+        </a>
+
+        <!-- Apple Podcasts -->
+        <a href="https://podcasts.apple.com/us/podcast/la-otra-cara/id6828563966" target="_blank" rel="noopener noreferrer" class="flex-1 min-w-[125px] sm:min-w-0 inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-3.5 border border-obsidian/[0.2] dark:border-darkBorder bg-stoneSoft/40 dark:bg-darkCard text-obsidian dark:text-darkText hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold transition-all rounded-sm font-mono text-[11px] sm:text-xs uppercase tracking-luxury">
+          <i data-lucide="podcast" class="w-4 h-4 text-bronze dark:text-accentGold shrink-0"></i>
+          <span class="font-medium">Apple &nearr;</span>
+        </a>
+
+        <!-- YouTube -->
+        <a href="https://www.youtube.com/@Tyanmena" target="_blank" rel="noopener noreferrer" class="flex-1 min-w-[125px] sm:min-w-0 inline-flex items-center justify-center space-x-2 px-4 py-3 sm:py-3.5 border border-obsidian/[0.2] dark:border-darkBorder bg-stoneSoft/40 dark:bg-darkCard text-obsidian dark:text-darkText hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold transition-all rounded-sm font-mono text-[11px] sm:text-xs uppercase tracking-luxury">
+          <i data-lucide="youtube" class="w-4 h-4 text-bronze dark:text-accentGold shrink-0"></i>
+          <span class="font-medium">YouTube &nearr;</span>
         </a>
       </div>
 
     </section>
 
-    <!-- ==================== EPISODIO DESTACADO ==================== -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-24 border-b border-obsidian/[0.08] dark:border-darkBorder scroll-reveal">
-      <div class="bg-stoneSoft/60 dark:bg-darkCard border border-obsidian/[0.08] dark:border-darkBorder p-6 sm:p-10 lg:p-16 relative overflow-hidden transition-colors">
-        
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
-          
-          <div class="lg:col-span-8">
-            <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-[10px] sm:text-xs tracking-luxury uppercase text-taupe dark:text-darkMuted mb-3 sm:mb-4">
-              <span class="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian text-[9px] sm:text-[10px] font-semibold tracking-widest">
-                Estreno Oficial
-              </span>
-              <span>EP. 08</span>
-              <span>&middot;</span>
-              <span>Temporada 2026</span>
-              <span>&middot;</span>
-              <span>10:02 Minutos</span>
-            </div>
-
-            <h2 class="font-serif text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-normal text-obsidian dark:text-darkText leading-tight mb-4 sm:mb-6">
-              Recuerda que vas a morir: El remedio contra el ego (Eclesiastés)
-            </h2>
-
-            <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted leading-relaxed mb-6 sm:mb-8 max-w-2xl font-light">
-              Nadie se acordará de lo que hicimos, y aun así dejamos de actuar por miedo al qué dirán. Un recorrido crudo por el libro de Eclesiastés y el Dhammapada: la trampa del placer vacío, la diferencia entre vivir en luz o a oscuras, y los 4 pasos para soltar el ego, respetar a Dios, construir riqueza con sabiduría y disfrutar de nuestro trabajo hoy.
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6">
-              <!-- Enlace Directo Oficial a Spotify -->
-              <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto inline-flex items-center justify-center space-x-3 bg-obsidian dark:bg-darkText text-alabaster dark:text-obsidian px-6 sm:px-7 py-3.5 text-xs uppercase tracking-luxury hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-colors shadow-sm group">
-                <i data-lucide="headphones" class="w-3.5 h-3.5 text-accentGold group-hover:scale-110 transition-transform"></i>
-                <span>ESCUCHAR EN SPOTIFY &nearr;</span>
-              </a>
-
-              <button onclick="copyEpisodeLink('ep-08')" id="shareBtn-ep-08" class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted hover:text-obsidian dark:hover:text-darkText transition-colors py-2 sm:py-3 border sm:border-0 border-obsidian/[0.1] dark:border-darkBorder">
-                <i data-lucide="share-2" class="w-3.5 h-3.5 sm:w-4 sm:h-4"></i>
-                <span id="shareText-ep-08">Compartir nota</span>
-              </button>
-            </div>
-          </div>
-
-          <!-- Miniatura / Carátula de la portada a todo color (Abre Spotify) -->
-          <div class="lg:col-span-4 flex justify-center">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="relative w-44 sm:w-56 lg:w-64 aspect-square border border-neutral-800 bg-neutral-950 p-2 shadow-2xl group block cursor-pointer" title="Escuchar en Spotify">
-              <img 
-                src="portada-la-otra-cara.jpg" 
-                alt="Portada La Otra Cara con Tyan" 
-                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                onerror="this.src='https://images.unsplash.com/photo-1544717305-2782549b5136?q=80&w=800&auto=format&fit=crop'"
-              />
-              <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-alabaster text-obsidian flex items-center justify-center shadow-lg">
-                  <i data-lucide="headphones" class="w-5 h-5 sm:w-6 sm:h-6 text-bronze ml-0.5"></i>
-                </div>
-              </div>
-            </a>
-          </div>
-
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ==================== ARCHIVO DE EPISODIOS (ÍNDICE EDITORIAL) ==================== -->
-    <section id="episodios" class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-24 border-b border-obsidian/[0.08] dark:border-darkBorder">
+    <!-- ==================== 2. ARCHIVO DE EPISODIOS (LIMPIO, DIRECTO Y CON ESPACIO NEGATIVO) ==================== -->
+    <section id="episodios" class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-14 sm:py-20 border-b border-obsidian/[0.08] dark:border-darkBorder">
       
-      <!-- 2. Encabezado de Sección + 3 Botones de Plataformas Oficiales -->
-      <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-8 sm:mb-10 pb-6 border-b border-obsidian/[0.08] dark:border-darkBorder gap-5 sm:gap-6 scroll-reveal">
+      <!-- Encabezado de Sección -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 pb-5 border-b border-obsidian/[0.08] dark:border-darkBorder gap-4 scroll-reveal">
         <div>
-          <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium block mb-2 sm:mb-3">
+          <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium block mb-1.5">
             01 &mdash; CATÁLOGO SONORO
           </span>
-          <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-obsidian dark:text-darkText tracking-tight">
+          <h2 class="font-serif text-3xl sm:text-4xl font-normal text-obsidian dark:text-darkText tracking-tight">
             Archivo de Conversaciones
           </h2>
-          <p class="text-xs sm:text-sm text-taupe dark:text-darkMuted font-light max-w-md leading-relaxed mt-2">
-            Un catálogo sin fecha de caducidad. 8 episodios producidos con crudeza, pensamiento crítico y verdad.
-          </p>
         </div>
 
-        <!-- 3 Botones de Acceso Directo Oficiales (Alineados a la derecha en escritorio / Fila limpia en móvil) -->
-        <div class="flex flex-wrap items-center gap-2 sm:gap-2.5 shrink-0 pt-2 lg:pt-0">
-          <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-1.5 border border-neutral-800 dark:border-neutral-700/80 bg-stoneSoft/40 dark:bg-darkCard/40 px-3 py-1.5 text-xs uppercase tracking-widest text-obsidian dark:text-darkText hover:border-[#9A8468] hover:text-[#9A8468] dark:hover:border-accentGold dark:hover:text-accentGold transition-all font-mono">
-            <i data-lucide="disc" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
-            <span>Spotify &nearr;</span>
-          </a>
-          <a href="https://podcasts.apple.com/us/podcast/la-otra-cara/id6828563966" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-1.5 border border-neutral-800 dark:border-neutral-700/80 bg-stoneSoft/40 dark:bg-darkCard/40 px-3 py-1.5 text-xs uppercase tracking-widest text-obsidian dark:text-darkText hover:border-[#9A8468] hover:text-[#9A8468] dark:hover:border-accentGold dark:hover:text-accentGold transition-all font-mono">
-            <i data-lucide="podcast" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
-            <span>Apple Podcasts &nearr;</span>
-          </a>
-          <a href="https://www.youtube.com/@Tyanmena" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center space-x-1.5 border border-neutral-800 dark:border-neutral-700/80 bg-stoneSoft/40 dark:bg-darkCard/40 px-3 py-1.5 text-xs uppercase tracking-widest text-obsidian dark:text-darkText hover:border-[#9A8468] hover:text-[#9A8468] dark:hover:border-accentGold dark:hover:text-accentGold transition-all font-mono">
-            <i data-lucide="youtube" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
-            <span>YouTube &nearr;</span>
-          </a>
-        </div>
+        <span class="text-xs font-mono uppercase tracking-luxury text-taupe dark:text-darkMuted">
+          8 Episodios &middot; 2026
+        </span>
       </div>
 
-      <!-- Reproductor Oficial de Spotify Embebido (Tema Oscuro - Ancho 100% Sin Desborde) -->
+      <!-- Reproductor Embebido de Spotify (Minimalista) -->
       <div class="w-full overflow-hidden border border-neutral-800/80 bg-neutral-950/60 p-3 sm:p-4 mb-8 transition-colors rounded-sm scroll-reveal">
-        <div class="flex items-center justify-between mb-3 text-xs tracking-luxury uppercase">
+        <div class="flex items-center justify-between mb-2.5 text-xs tracking-luxury uppercase">
           <div class="flex items-center space-x-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span class="text-[9px] sm:text-[10px] text-bronze dark:text-accentGold font-semibold tracking-widest font-mono">
-              REPRODUCTOR OFICIAL &middot; SPOTIFY
+              REPRODUCTOR SPOTIFY
             </span>
           </div>
           <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="text-[10px] text-taupe dark:text-darkMuted hover:text-bronze dark:hover:text-accentGold transition-colors flex items-center space-x-1 font-mono">
-            <span>Abrir en Spotify</span>
+            <span>Abrir app</span>
             <i data-lucide="external-link" class="w-3 h-3"></i>
           </a>
         </div>
@@ -502,383 +341,211 @@
         </div>
       </div>
 
-      <!-- 2. BANNER SUTIL DE SUSCRIPCIÓN & AUDIENCIA -->
-      <div class="mb-8 p-4 sm:p-5 border border-bronze/30 dark:border-accentGold/20 bg-stoneSoft/40 dark:bg-darkCard/40 flex flex-col sm:flex-row items-center justify-between gap-4 scroll-reveal">
-        <div class="flex items-center space-x-3 text-center sm:text-left">
-          <span class="w-2 h-2 rounded-full bg-accentGold shrink-0 animate-pulse"></span>
-          <p class="font-serif text-sm sm:text-base text-obsidian dark:text-darkText font-normal italic">
-            "Suscríbete en tu plataforma favorita y forma parte de La Otra Cara con Tyan."
-          </p>
-        </div>
-        <div class="flex items-center gap-2 shrink-0 text-[10px] tracking-luxury uppercase font-mono">
-          <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 border border-obsidian/[0.15] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold text-obsidian dark:text-darkText transition-colors flex items-center gap-1">
-            <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
-            <span>Spotify</span>
-          </a>
-          <a href="https://podcasts.apple.com/us/podcast/la-otra-cara/id6828563966" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 border border-obsidian/[0.15] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold text-obsidian dark:text-darkText transition-colors flex items-center gap-1">
-            <i data-lucide="podcast" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
-            <span>Apple</span>
-          </a>
-          <a href="https://www.youtube.com/@Tyanmena" target="_blank" rel="noopener noreferrer" class="px-2.5 py-1.5 border border-obsidian/[0.15] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold text-obsidian dark:text-darkText transition-colors flex items-center gap-1">
-            <i data-lucide="youtube" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
-            <span>YouTube</span>
-          </a>
-        </div>
-      </div>
-
-      <!-- Filtro sutil por Temas (Responsive Scroll/Wrap) -->
-      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2.5 mb-8 sm:mb-10 text-[10px] sm:text-xs tracking-luxury uppercase">
-        <button onclick="filterEpisodes('all', event)" class="filter-btn active-filter px-3 sm:px-4 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian transition-all">
+      <!-- Filtro sutil por Temas -->
+      <div class="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-8 text-[10px] sm:text-xs tracking-luxury uppercase">
+        <button onclick="filterEpisodes('all', event)" class="filter-btn active-filter px-3 py-1.5 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian transition-all">
           Todos (8)
         </button>
-        <button onclick="filterEpisodes('filosofia', event)" class="filter-btn px-3 sm:px-4 py-2 border border-obsidian/[0.12] dark:border-darkBorder text-taupe dark:text-darkMuted hover:border-obsidian dark:hover:border-darkText transition-all">
+        <button onclick="filterEpisodes('filosofia', event)" class="filter-btn px-3 py-1.5 border border-obsidian/[0.12] dark:border-darkBorder text-taupe dark:text-darkMuted hover:border-obsidian dark:hover:border-darkText transition-all">
           Filosofía &amp; Ego
         </button>
-        <button onclick="filterEpisodes('accion', event)" class="filter-btn px-3 sm:px-4 py-2 border border-obsidian/[0.12] dark:border-darkBorder text-taupe dark:text-darkMuted hover:border-obsidian dark:hover:border-darkText transition-all">
+        <button onclick="filterEpisodes('accion', event)" class="filter-btn px-3 py-1.5 border border-obsidian/[0.12] dark:border-darkBorder text-taupe dark:text-darkMuted hover:border-obsidian dark:hover:border-darkText transition-all">
           Disciplina &amp; Acción
         </button>
-        <button onclick="filterEpisodes('estrategia', event)" class="filter-btn px-3 sm:px-4 py-2 border border-obsidian/[0.12] dark:border-darkBorder text-taupe dark:text-darkMuted hover:border-obsidian dark:hover:border-darkText transition-all">
+        <button onclick="filterEpisodes('estrategia', event)" class="filter-btn px-3 py-1.5 border border-obsidian/[0.12] dark:border-darkBorder text-taupe dark:text-darkMuted hover:border-obsidian dark:hover:border-darkText transition-all">
           Estrategia &amp; Negocios
         </button>
       </div>
 
-      <!-- Lista Editorial Numerada (Con enlaces directos optimizados para tráfico en cada episodio) -->
+      <!-- LISTA EDITORIAL DE EPISODIOS ULTRA LIMPIA (SIN TEXTOS LARGOS, SÓLO NÚMERO, TÍTULO Y BOTÓN ESCUCHAR) -->
       <div class="divide-y divide-obsidian/[0.08] dark:divide-darkBorder border-t border-obsidian/[0.08] dark:border-darkBorder" id="episodesList">
         
         <!-- Episodio 08 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-bronze bg-stoneSoft/20 dark:bg-darkCard/20 flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="filosofia" data-id="ep-08">
-          
-          <!-- Top Row Móvil: Número + Categoría + Duración -->
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-bronze dark:text-accentGold font-medium">08</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                FILOSOFÍA &amp; REALIDAD
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-bronze dark:text-accentGold font-bold">
-              10:02 MIN
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="filosofia" data-id="ep-08">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-bronze dark:text-accentGold font-medium shrink-0 w-8">08</span>
+            <div class="min-w-0">
+              <div class="flex items-center gap-2 mb-0.5">
+                <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono shrink-0">FILOSOFÍA &amp; REALIDAD</span>
+                <span class="text-[9px] text-bronze dark:text-accentGold font-bold font-mono">&bull; ESTRENO</span>
+              </div>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                Recuerda que vas a morir: El remedio contra el ego (Eclesiastés)
+              </h3>
             </div>
           </div>
-
-          <!-- Centro: Título y Sinopsis -->
-          <div class="md:col-span-6">
-            <div class="hidden md:flex items-center space-x-2 mb-1">
-              <span class="text-[9px] uppercase tracking-widest text-bronze dark:text-accentGold font-bold">&bull; ESTRENO</span>
-            </div>
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              Recuerda que vas a morir: El remedio contra el ego (Eclesiastés)
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              Nadie se acordará de lo que hicimos. Un análisis crudo sobre el ego, la muerte y por qué la sabiduría nos hace caminar en luz.
-            </p>
-          </div>
-
-          <!-- Duración Desktop -->
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">10:02 MIN</span>
-            <span class="text-[10px] text-bronze dark:text-accentGold font-bold">ESTRENO</span>
-          </div>
-
-          <!-- Botón Directo a Plataforma (Optimizado para Monetización & Tráfico) -->
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">10:02 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian dark:border-darkBorder bg-obsidian text-alabaster dark:bg-darkCard dark:text-darkText hover:border-bronze dark:hover:border-accentGold hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 07 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="filosofia" data-id="ep-07">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">07</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                REALIDAD &amp; EGO
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              06:20 MIN &middot; 30/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="filosofia" data-id="ep-07">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">07</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">REALIDAD &amp; EGO</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                La trampa de la validación: Por qué buscas aprobación de quien no admiras
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              A nadie le importa tu vida.
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              La libertad que nace cuando destruyes la ilusión de que el mundo vive pendiente de tus pasos y opiniones.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">06:20 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">30/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">08:45 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 06 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="accion" data-id="ep-06">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">06</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                LUCIDEZ &amp; FOCO
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              05:11 MIN &middot; 30/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="accion" data-id="ep-06">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">06</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">DISCIPLINA &amp; ACCIÓN</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                El mito de la motivación: La disciplina como único refugio real
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              TikTok te está arruinando la vida.
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              El secuestro de la atención, la dopamina barata y el precio invisible de anestesiar tu mente frente a una pantalla.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">05:11 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">30/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">09:12 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 05 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="estrategia" data-id="ep-05">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">05</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                VENTAS &amp; VERDAD
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              11:42 MIN &middot; 30/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="estrategia" data-id="ep-05">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">05</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">ESTRATEGIA &amp; NEGOCIOS</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                Vender sin vender el alma: Negocios desde la honestidad radical
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              El marketing es una mentira.
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              Una disección sin filtros desde adentro sobre las promesas vacías, la manipulación del deseo y cómo comunicar desde la verdad.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">11:42 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">30/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">11:30 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 04 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="accion" data-id="ep-04">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">04</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                DISCIPLINA &amp; ACCIÓN
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              05:29 MIN &middot; 30/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="filosofia" data-id="ep-04">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">04</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">FILOSOFÍA &amp; RESILIENCIA</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                El arte de forjar carácter en la soledad
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              La zona de confort es una basura
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              Por qué la comodidad aparente es el lugar más peligroso para quien nació con hambre de construir algo real.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">05:29 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">30/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">08:15 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 03 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="filosofia" data-id="ep-03">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">03</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                MENTALIDAD &amp; PODER
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              06:29 MIN &middot; 29/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="accion" data-id="ep-03">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">03</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">PSICOLOGÍA &amp; ACCIÓN</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                El costo de la complacencia: Cuando decir 'no' te salva la vida
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              Tu debilidad es no entender tu poder.
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              El despertar del carácter cuando dejas de subestimar tu propia capacidad de transformar el dolor y la circunstancia.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">06:29 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">29/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">07:50 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 02 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="filosofia" data-id="ep-02">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">02</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                SABIDURÍA PRÁCTICA
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              06:54 MIN &middot; 29/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="filosofia" data-id="ep-02">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">02</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">SABIDURÍA PRÁCTICA</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                Acumular no es integrar
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              Acumular no es integrar
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              De nada sirve llenarse de libros, teorías y conceptos si no encarnas la sabiduría en tus decisiones diarias.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">06:54 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">29/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">06:54 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
         <!-- Episodio 01 -->
-        <article class="episode-row scroll-reveal group py-5 sm:py-7 transition-all duration-300 hover:bg-stoneSoft/40 dark:hover:bg-darkCard/40 px-3 sm:px-4 -mx-3 border-l-2 border-transparent hover:border-bronze flex flex-col md:grid md:grid-cols-12 gap-3 md:gap-6 items-stretch md:items-center" data-category="estrategia" data-id="ep-01">
-          
-          <div class="flex items-center justify-between md:col-span-3">
-            <div class="flex items-center gap-2.5 sm:gap-3">
-              <span class="font-serif text-2xl sm:text-3xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors">01</span>
-              <span class="inline-block text-[9px] sm:text-[10px] uppercase tracking-luxury text-bronze dark:text-accentGold bg-stoneSoft dark:bg-darkBg px-2 py-0.5 border border-bronze/20 font-mono">
-                ESTRATEGIA &amp; VIDA
-              </span>
-            </div>
-            <div class="md:hidden text-[10px] font-mono uppercase text-taupe dark:text-darkMuted">
-              07:35 MIN &middot; 29/10/26
+        <article class="episode-row scroll-reveal group py-4 sm:py-5 transition-all duration-300 hover:bg-stoneSoft/30 dark:hover:bg-darkCard/30 px-2 sm:px-4 -mx-2 sm:-mx-4 border-l-2 border-transparent hover:border-bronze flex items-center justify-between gap-3 sm:gap-6" data-category="estrategia" data-id="ep-01">
+          <div class="flex items-center gap-3 sm:gap-5 min-w-0 flex-1">
+            <span class="font-serif text-xl sm:text-2xl text-taupe/60 dark:text-darkMuted/60 group-hover:text-bronze transition-colors shrink-0 w-8">01</span>
+            <div class="min-w-0">
+              <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-0.5">ESTRATEGIA &amp; VIDA</span>
+              <h3 class="font-serif text-base sm:text-xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors truncate">
+                La esperanza no es una estrategia.
+              </h3>
             </div>
           </div>
-
-          <div class="md:col-span-6">
-            <h3 class="font-serif text-lg sm:text-xl md:text-2xl font-normal text-obsidian dark:text-darkText group-hover:text-bronze dark:group-hover:text-accentGold transition-colors leading-snug">
-              La esperanza no es una estrategia.
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light mt-1 sm:mt-1.5 leading-relaxed">
-              Esperar sentado a que las cosas cambien no te salvará; solo la ejecución implacable construye resultados.
-            </p>
-          </div>
-
-          <div class="hidden md:flex md:col-span-1 text-xs tracking-editorial uppercase text-taupe dark:text-darkMuted font-mono flex-col">
-            <span class="font-medium text-obsidian dark:text-darkText">07:35 MIN</span>
-            <span class="text-[10px] text-taupe/60 dark:text-darkMuted/60">29/10/26</span>
-          </div>
-
-          <div class="flex items-center justify-between md:justify-end gap-2 pt-2 md:pt-0 border-t md:border-t-0 border-obsidian/[0.05] dark:border-darkBorder/40 md:col-span-2">
-            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="w-full md:w-auto inline-flex items-center justify-center space-x-1.5 px-3.5 py-2 border border-obsidian dark:border-darkText bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all text-[11px] font-mono uppercase tracking-luxury font-medium shadow-sm group/btn shrink-0">
-              <i data-lucide="disc" class="w-3.5 h-3.5 text-accentGold group-hover/btn:scale-110 transition-transform"></i>
-              <span>SPOTIFY &nearr;</span>
+          <div class="flex items-center gap-3 shrink-0">
+            <span class="hidden md:inline text-[11px] font-mono uppercase text-taupe dark:text-darkMuted">07:35 MIN</span>
+            <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1.5 px-3 py-1.5 border border-obsidian/[0.2] dark:border-darkBorder hover:border-bronze dark:hover:border-accentGold text-obsidian dark:text-darkText hover:text-bronze dark:hover:text-accentGold transition-all text-[10px] font-mono uppercase tracking-luxury shrink-0">
+              <i data-lucide="disc" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+              <span>ESCUCHAR &nearr;</span>
             </a>
           </div>
-
         </article>
 
       </div>
 
     </section>
 
-    <!-- ==================== SECCIÓN "QUIÉN SOY" (SOBRE SEBASTIÁN MENA) ==================== -->
-    <section id="quien-soy" class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-24 lg:py-32 border-b border-obsidian/[0.08] dark:border-darkBorder">
+    <!-- ==================== 3. SECCIÓN "QUIÉN SOY" (SINTETIZADA, DIRECTA Y CONTUNDENTE) ==================== -->
+    <section id="quien-soy" class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 py-14 sm:py-20 border-b border-obsidian/[0.08] dark:border-darkBorder">
       
-      <!-- 1. ENCABEZADO DE SECCIÓN -->
-      <div class="mb-10 sm:mb-14 lg:mb-16 scroll-reveal">
-        <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium block mb-3 sm:mb-4">
+      <!-- 1. Encabezado de Sección -->
+      <div class="mb-8 sm:mb-12 scroll-reveal">
+        <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium block mb-2 sm:mb-3">
           02 &mdash; QUIÉN SOY / EL ORIGEN
         </span>
-        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-normal text-obsidian dark:text-darkText leading-[1.18] sm:leading-[1.14] tracking-tight max-w-4xl">
+        <h2 class="font-serif text-2xl xs:text-3xl sm:text-4xl lg:text-5xl font-normal text-obsidian dark:text-darkText leading-[1.18] sm:leading-[1.14] tracking-tight max-w-3xl">
           El hombre forja al <em class="italic font-normal text-bronze dark:text-accentGold">dolor</em>: tiene la capacidad de convertirlo en su enemigo o en su <em class="italic font-normal text-bronze dark:text-accentGold">aliado</em>.
         </h2>
       </div>
 
-      <!-- 2. COMPOSICIÓN A DOS COLUMNAS -->
-      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+      <!-- 2. Composición Editorial Sintetizada a Dos Columnas -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-14 items-start">
         
-        <!-- Columna Izquierda: Retrato Editorial y Ficha Estética -->
-        <div class="lg:col-span-5 lg:sticky lg:top-28 w-full max-w-sm mx-auto lg:max-w-none scroll-reveal">
-          <div class="border border-obsidian/[0.1] dark:border-darkBorder p-2.5 sm:p-3 bg-stoneSoft/40 dark:bg-darkCard/40">
+        <!-- Columna Izquierda: Retrato y Ficha Estética -->
+        <div class="lg:col-span-5 w-full max-w-xs mx-auto lg:max-w-none scroll-reveal">
+          <div class="border border-obsidian/[0.1] dark:border-darkBorder p-2.5 bg-stoneSoft/40 dark:bg-darkCard/40">
             <div class="aspect-[3/4] overflow-hidden bg-neutral-900">
               <!-- Fotografía de Sebastián Mena -->
               <img 
@@ -889,8 +556,7 @@
               />
             </div>
             
-            <!-- Pie de foto de revista con datos sutiles -->
-            <div class="pt-3.5 pb-1 px-1 border-t border-obsidian/[0.08] dark:border-darkBorder mt-2.5 sm:mt-3 space-y-1.5 sm:space-y-2 text-[10px] sm:text-[11px]">
+            <div class="pt-3 pb-0.5 px-1 border-t border-obsidian/[0.08] dark:border-darkBorder mt-2.5 space-y-1.5 text-[10px] sm:text-[11px]">
               <div class="flex flex-col sm:flex-row sm:items-baseline gap-1">
                 <span class="tracking-luxury uppercase text-bronze dark:text-accentGold font-medium text-[9px] sm:text-[10px]">FILOSOFÍA:</span>
                 <span class="text-taupe dark:text-darkMuted font-light">El arte de vivir sin prisa.</span>
@@ -903,36 +569,36 @@
           </div>
         </div>
 
-        <!-- Columna Derecha: Narrativa en 3 Bloques Limpios -->
-        <div class="lg:col-span-7 flex flex-col justify-center space-y-8 sm:space-y-10">
+        <!-- Columna Derecha: Narrativa Sintetizada en Frases Contundentes -->
+        <div class="lg:col-span-7 flex flex-col justify-center space-y-6 sm:space-y-8">
           
           <!-- Bloque I -->
-          <div class="scroll-reveal border-b border-obsidian/[0.08] dark:border-darkBorder pb-6 sm:pb-8">
-            <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-semibold block mb-2 sm:mb-3">
+          <div class="scroll-reveal border-b border-obsidian/[0.08] dark:border-darkBorder pb-5 sm:pb-6">
+            <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-semibold block mb-2">
               I. EL ORIGEN DEL PORQUÉ
             </span>
-            <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted font-light leading-relaxed">
-              No hablo ni escribo desde la teoría, sino desde el peso de la ausencia. Mi necesidad de cuestionar todo lo que me rodea nació temprano: a los quince años con la muerte de mi padre, más tarde con la partida de mi amiga María, y a los veintidós, cuando atravesé la pérdida de mi libertad en prisión. Esos silencios forzados apagaron el ruido externo y despertaron en mí una urgencia innegociable: comprender el porqué de nuestra existencia y el propósito detrás de cada cicatriz.
+            <p class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText font-normal leading-relaxed italic">
+              "No hablo desde la teoría, sino desde la ausencia de mi padre, la pérdida de amigos y el silencio forzado de la prisión a los veintidós. Esos inviernos me enseñaron que el dolor no se esquiva: se forja como carácter y propósito."
             </p>
           </div>
 
           <!-- Bloque II -->
-          <div class="scroll-reveal border-b border-obsidian/[0.08] dark:border-darkBorder pb-6 sm:pb-8">
-            <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-semibold block mb-2 sm:mb-3">
+          <div class="scroll-reveal border-b border-obsidian/[0.08] dark:border-darkBorder pb-5 sm:pb-6">
+            <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-semibold block mb-2">
               II. COMUNICACIÓN, EMPRESA Y PROPÓSITO
             </span>
-            <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted font-light leading-relaxed">
-              En la oscuridad comprendí que el dolor no es una sentencia, sino materia prima. Esa convicción me llevó a la escritura, a este micrófono y al mundo empresarial. Como comunicador experto en ventas y fundador de Tyango &mdash;empresa dedicada a la elaboración de snacks de fruta&mdash;, concibo los negocios y la palabra como extensiones del mismo principio: el arte de vivir y conectar con el ser humano desde la verdad.
+            <p class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText font-normal leading-relaxed italic">
+              "El dolor es materia prima. Como comunicador, vendedor y fundador de Tyango (snacks de fruta), concibo la palabra y los negocios bajo la misma premisa: conectar con las personas desde la verdad más cruda y sin rodeos."
             </p>
           </div>
 
           <!-- Bloque III -->
           <div class="scroll-reveal">
-            <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-semibold block mb-2 sm:mb-3">
+            <span class="text-[10px] sm:text-[11px] uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-semibold block mb-2">
               III. EL PODCAST COMO TRINCHERA
             </span>
-            <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted font-light leading-relaxed">
-              Este espacio sonoro no busca dar respuestas fáciles ni consejos de autoayuda desechable. Es una bitácora viva donde convergen la filosofía estoica, la literatura y la psicología del comportamiento. Un lugar donde invitamos a pensadores, creadores y personas que han atravesado sus propios inviernos para explorar qué significa, verdaderamente, forjar una vida con carácter.
+            <p class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText font-normal leading-relaxed italic">
+              "Sin autoayuda desechable ni respuestas fáciles. Una bitácora de filosofía práctica, psicología y realidad para quienes entienden que forjar una vida con templanza exige cuestionarlo todo."
             </p>
           </div>
 
@@ -940,74 +606,53 @@
 
       </div>
 
-      <!-- 3. PILARES FUNDAMENTALES (TOUCH SWIPE CARDS - HORIZONTAL SCROLL SNAP EN MÓVIL / GRILLA EN DESKTOP) -->
-      <div class="mt-14 sm:mt-20 pt-12 sm:pt-16 border-t border-obsidian/[0.08] dark:border-darkBorder scroll-reveal">
-        <div class="flex items-center justify-between mb-4 sm:mb-8">
+      <!-- 3. Principios Fundamentales (Cards Touch Swipe en Móvil / Grid en Desktop) -->
+      <div class="mt-12 sm:mt-16 pt-10 sm:pt-12 border-t border-obsidian/[0.08] dark:border-darkBorder scroll-reveal">
+        <div class="flex items-center justify-between mb-4 sm:mb-6">
           <span class="text-[10px] sm:text-[11px] uppercase tracking-editorial text-taupe dark:text-darkMuted font-medium block">
             PRINCIPIOS NO NEGOCIABLES
           </span>
-          <!-- Pista visual de deslizamiento para móvil -->
           <span class="md:hidden inline-flex items-center gap-1 text-[9px] font-mono tracking-luxury uppercase text-bronze dark:text-accentGold">
             <i data-lucide="move-horizontal" class="w-3 h-3"></i>
             <span>Deslizar &rarr;</span>
           </span>
         </div>
 
-        <div class="flex overflow-x-auto snap-x snap-mandatory gap-4 pb-4 no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-6 md:pb-0">
+        <div class="flex overflow-x-auto snap-x snap-mandatory gap-3 pb-3 no-scrollbar md:grid md:grid-cols-2 lg:grid-cols-4 md:gap-5 md:pb-0">
           
           <!-- Pilar 1 -->
-          <div class="snap-center min-w-[260px] xs:min-w-[280px] sm:min-w-[300px] md:min-w-0 flex-shrink-0 md:flex-shrink pilar-card border border-obsidian/[0.08] dark:border-darkBorder p-5 sm:p-6 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300 cursor-pointer" onclick="togglePilar(this)">
-            <div class="flex items-center justify-between mb-3 sm:mb-4">
-              <span class="font-serif text-2xl text-bronze dark:text-accentGold">01</span>
-              <i data-lucide="chevron-down" class="pilar-icon w-4 h-4 text-taupe transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText mb-1.5 sm:mb-2 font-normal">
-              La quietud como escudo
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed pilar-content">
-              El exceso de estímulos atrofia el pensamiento profundo. El silencio voluntario es el primer paso para discernir lo esencial.
+          <div class="snap-center min-w-[240px] xs:min-w-[260px] sm:min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink border border-obsidian/[0.08] dark:border-darkBorder p-4 sm:p-5 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300">
+            <span class="text-[10px] uppercase font-mono tracking-luxury text-bronze dark:text-accentGold block mb-2">01 / TEMPLANZA</span>
+            <h4 class="font-serif text-base sm:text-lg font-medium text-obsidian dark:text-darkText mb-1.5">Dominio Interior</h4>
+            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed">
+              La calma no es ausencia de tormenta, sino el control absoluto de tus impulsos ante ella.
             </p>
           </div>
 
           <!-- Pilar 2 -->
-          <div class="snap-center min-w-[260px] xs:min-w-[280px] sm:min-w-[300px] md:min-w-0 flex-shrink-0 md:flex-shrink pilar-card border border-obsidian/[0.08] dark:border-darkBorder p-5 sm:p-6 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300 cursor-pointer" onclick="togglePilar(this)">
-            <div class="flex items-center justify-between mb-3 sm:mb-4">
-              <span class="font-serif text-2xl text-bronze dark:text-accentGold">02</span>
-              <i data-lucide="chevron-down" class="pilar-icon w-4 h-4 text-taupe transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText mb-1.5 sm:mb-2 font-normal">
-              Cicatrices como aliadas
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed pilar-content">
-              No reescribimos el pasado; lo transmutamos. Cada herida integrada amplía nuestra capacidad de conectar con el dolor ajeno.
+          <div class="snap-center min-w-[240px] xs:min-w-[260px] sm:min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink border border-obsidian/[0.08] dark:border-darkBorder p-4 sm:p-5 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300">
+            <span class="text-[10px] uppercase font-mono tracking-luxury text-bronze dark:text-accentGold block mb-2">02 / VERDAD</span>
+            <h4 class="font-serif text-base sm:text-lg font-medium text-obsidian dark:text-darkText mb-1.5">Claridad Radical</h4>
+            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed">
+              La verdad incomoda al mediocre y libera al sobrio. Comunicar con filo y sin maquillaje.
             </p>
           </div>
 
           <!-- Pilar 3 -->
-          <div class="snap-center min-w-[260px] xs:min-w-[280px] sm:min-w-[300px] md:min-w-0 flex-shrink-0 md:flex-shrink pilar-card border border-obsidian/[0.08] dark:border-darkBorder p-5 sm:p-6 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300 cursor-pointer" onclick="togglePilar(this)">
-            <div class="flex items-center justify-between mb-3 sm:mb-4">
-              <span class="font-serif text-2xl text-bronze dark:text-accentGold">03</span>
-              <i data-lucide="chevron-down" class="pilar-icon w-4 h-4 text-taupe transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText mb-1.5 sm:mb-2 font-normal">
-              Acción implacable
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed pilar-content">
-              La contemplación sin ejecución es mero autoengaño. La palabra solo adquiere peso ético cuando se respalda con hechos cotidianos.
+          <div class="snap-center min-w-[240px] xs:min-w-[260px] sm:min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink border border-obsidian/[0.08] dark:border-darkBorder p-4 sm:p-5 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300">
+            <span class="text-[10px] uppercase font-mono tracking-luxury text-bronze dark:text-accentGold block mb-2">03 / FOCO</span>
+            <h4 class="font-serif text-base sm:text-lg font-medium text-obsidian dark:text-darkText mb-1.5">Silencio Estratégico</h4>
+            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed">
+              En una época inundada de ruido estéril, el verdadero poder reside en saber cuándo callar.
             </p>
           </div>
 
           <!-- Pilar 4 -->
-          <div class="snap-center min-w-[260px] xs:min-w-[280px] sm:min-w-[300px] md:min-w-0 flex-shrink-0 md:flex-shrink pilar-card border border-obsidian/[0.08] dark:border-darkBorder p-5 sm:p-6 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300 cursor-pointer" onclick="togglePilar(this)">
-            <div class="flex items-center justify-between mb-3 sm:mb-4">
-              <span class="font-serif text-2xl text-bronze dark:text-accentGold">04</span>
-              <i data-lucide="chevron-down" class="pilar-icon w-4 h-4 text-taupe transition-transform duration-300"></i>
-            </div>
-            <h3 class="font-serif text-base sm:text-lg text-obsidian dark:text-darkText mb-1.5 sm:mb-2 font-normal">
-              Vivir sin prisa
-            </h3>
-            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed pilar-content">
-              La urgencia es enemiga de la maestría. Lo que está destinado a perdurar requiere tiempo, reposo y devoción minuciosa.
+          <div class="snap-center min-w-[240px] xs:min-w-[260px] sm:min-w-[280px] md:min-w-0 flex-shrink-0 md:flex-shrink border border-obsidian/[0.08] dark:border-darkBorder p-4 sm:p-5 bg-stoneSoft/20 dark:bg-darkCard/20 hover:border-bronze dark:hover:border-accentGold transition-all duration-300">
+            <span class="text-[10px] uppercase font-mono tracking-luxury text-bronze dark:text-accentGold block mb-2">04 / ACCIÓN</span>
+            <h4 class="font-serif text-base sm:text-lg font-medium text-obsidian dark:text-darkText mb-1.5">Ejecución Implacable</h4>
+            <p class="text-xs text-taupe dark:text-darkMuted font-light leading-relaxed">
+              Las ideas no valen nada sin la disciplina diaria de ejecutarlas hasta las últimas consecuencias.
             </p>
           </div>
 
@@ -1016,31 +661,31 @@
 
     </section>
 
-    <!-- ==================== 3. NUEVA SECCIÓN: ESPACIO DE REFLEXIÓN / PREGUNTAS ==================== -->
-    <section id="preguntas" class="max-w-4xl mx-auto px-4 sm:px-8 lg:px-12 py-16 sm:py-24 border-b border-obsidian/[0.08] dark:border-darkBorder scroll-reveal">
+    <!-- ==================== 4. SECCIÓN "PREGUNTAS" (ESPACIO DE REFLEXIÓN / APERTURA DE DEBATE) ==================== -->
+    <section id="preguntas" class="max-w-4xl mx-auto px-4 sm:px-8 py-14 sm:py-20 border-b border-obsidian/[0.08] dark:border-darkBorder scroll-reveal">
       
-      <div class="text-center mb-10 sm:mb-14">
-        <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium block mb-3">
+      <div class="text-center mb-8 sm:mb-10">
+        <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium block mb-2">
           03 &mdash; ESPACIO DE REFLEXIÓN / PREGUNTAS
         </span>
-        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-obsidian dark:text-darkText tracking-tight mb-4">
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-normal text-obsidian dark:text-darkText tracking-tight mb-3">
           Haz una pregunta. Abre el debate.
         </h2>
-        <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted font-light leading-relaxed max-w-2xl mx-auto">
-          Este espacio no es para buscar respuestas complacientes, sino para poner sobre la mesa lo que otros callan. Envía tu duda, tu cuestionamiento o el tema que quieres que desfiguremos sin filtros en el próximo episodio.
+        <p class="text-xs sm:text-sm text-taupe dark:text-darkMuted font-light max-w-xl mx-auto leading-relaxed">
+          Envía tu duda, dilema o tema sin filtros. Las preguntas más crudas y profundas serán desmenuzadas en el próximo episodio de La Otra Cara con Tyan.
         </p>
       </div>
 
       <!-- Formulario Minimalista de Pregunta / Dilema -->
-      <form id="questionForm" onsubmit="handleQuestionForm(event)" class="max-w-2xl mx-auto space-y-6 sm:space-y-8 bg-stoneSoft/30 dark:bg-darkCard/30 p-6 sm:p-10 border border-obsidian/[0.08] dark:border-darkBorder rounded-sm">
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 sm:gap-8">
+      <form id="questionForm" onsubmit="handleQuestionForm(event)" class="space-y-6 bg-stoneSoft/30 dark:bg-darkCard/30 p-5 sm:p-8 border border-obsidian/[0.08] dark:border-darkBorder rounded-sm">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
           <!-- Campo Nombre -->
           <div class="border-b border-obsidian/30 dark:border-darkBorder focus-within:border-bronze dark:focus-within:border-accentGold transition-colors pb-2">
             <label for="questionName" class="block text-[9px] uppercase tracking-luxury text-taupe dark:text-darkMuted font-semibold mb-1">Nombre o Pseudónimo</label>
             <input 
               type="text" 
               id="questionName" 
-              placeholder="¿Cómo te llamamos?" 
+              placeholder="¿Cómo te identificas?" 
               required
               class="w-full bg-transparent text-sm sm:text-base text-obsidian dark:text-darkText placeholder-taupe/50 dark:placeholder-darkMuted/50 focus:outline-none font-light"
             />
@@ -1064,21 +709,21 @@
           <label for="questionText" class="block text-[9px] uppercase tracking-luxury text-taupe dark:text-darkMuted font-semibold mb-1">Tu pregunta, dilema o tema sin filtro</label>
           <textarea 
             id="questionText" 
-            rows="4" 
-            placeholder="Escribe con franqueza. ¿Cuál es tu contradicción, duda existencial o situación que amerita una charla cruda?"
+            rows="3" 
+            placeholder="Escribe con franqueza. ¿Cuál es tu contradicción, duda existencial o situación que amerita una charla directa?"
             required
             class="w-full bg-transparent text-sm sm:text-base text-obsidian dark:text-darkText placeholder-taupe/50 dark:placeholder-darkMuted/50 focus:outline-none font-light resize-none leading-relaxed"
           ></textarea>
         </div>
 
-        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
-          <p class="text-[10px] text-taupe/70 dark:text-darkMuted/70 font-mono tracking-widest uppercase">
-            &bull; Las mejores preguntas serán discutidas en vivo.
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-1">
+          <p class="text-[9px] sm:text-[10px] text-taupe/70 dark:text-darkMuted/70 font-mono tracking-widest uppercase">
+            &bull; Confidencialidad y criterio editorial garantizados.
           </p>
 
           <button 
             type="submit" 
-            class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian px-7 py-3.5 text-xs uppercase tracking-luxury font-medium hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all shadow-sm shrink-0"
+            class="w-full sm:w-auto inline-flex items-center justify-center space-x-2 bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian px-6 py-3 text-xs uppercase tracking-luxury font-medium hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg transition-all shadow-sm shrink-0 font-mono"
           >
             <span>ENVIAR PREGUNTA &nearr;</span>
           </button>
@@ -1091,22 +736,22 @@
 
     </section>
 
-    <!-- ==================== NEWSLETTER / CARTA PRIVADA ==================== -->
-    <section id="carta-privada" class="max-w-4xl mx-auto px-4 sm:px-8 py-20 sm:py-28 lg:py-36 text-center scroll-reveal">
+    <!-- ==================== 5. NEWSLETTER / CARTA PRIVADA ==================== -->
+    <section id="carta-privada" class="max-w-4xl mx-auto px-4 sm:px-8 py-16 sm:py-24 text-center scroll-reveal">
       
-      <span class="inline-block text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium mb-3 sm:mb-4">
+      <span class="inline-block text-[10px] sm:text-xs uppercase tracking-[0.25em] text-bronze dark:text-accentGold font-medium mb-2.5">
         Correspondencia Exclusiva
       </span>
 
-      <h2 class="font-serif text-3xl xs:text-4xl sm:text-5xl lg:text-6xl font-normal text-obsidian dark:text-darkText tracking-tight mb-4 sm:mb-6 leading-tight">
+      <h2 class="font-serif text-3xl xs:text-4xl sm:text-5xl font-normal text-obsidian dark:text-darkText tracking-tight mb-3 leading-tight">
         Ideas que merecen silencio.
       </h2>
 
-      <p class="text-xs sm:text-sm md:text-base text-taupe dark:text-darkMuted font-light leading-relaxed max-w-xl mx-auto mb-8 sm:mb-12">
-        Un domingo cada dos semanas envío una carta privada con reflexiones no publicadas, extractos de mis cuadernos de notas y los primeros accesos a nuevos episodios. Sin algoritmos, sin publicidad, sin prisas.
+      <p class="text-xs sm:text-sm text-taupe dark:text-darkMuted font-light leading-relaxed max-w-lg mx-auto mb-7">
+        Un domingo cada dos semanas envío una carta privada con reflexiones no publicadas y notas de campo. Sin algoritmos, sin ruido.
       </p>
 
-      <!-- Formulario Editorial Minimalista (Línea Inferior) -->
+      <!-- Formulario Minimalista -->
       <form id="newsletterForm" onsubmit="handleNewsletter(event)" class="max-w-md mx-auto">
         <div class="relative flex items-center border-b border-obsidian/40 dark:border-darkBorder focus-within:border-obsidian dark:focus-within:border-darkText transition-colors pb-2">
           <input 
@@ -1125,12 +770,12 @@
           </button>
         </div>
 
-        <p id="formFeedback" class="text-xs text-bronze dark:text-accentGold mt-4 opacity-0 transition-opacity duration-300 font-light">
+        <p id="formFeedback" class="text-xs text-bronze dark:text-accentGold mt-3 opacity-0 transition-opacity duration-300 font-light">
           Gracias por unirte. Tu buzón recibirá la próxima carta en domingo.
         </p>
       </form>
 
-      <div class="mt-8 flex flex-wrap justify-center items-center gap-4 text-[10px] sm:text-[11px] tracking-luxury uppercase text-taupe/60 dark:text-darkMuted/60">
+      <div class="mt-6 flex flex-wrap justify-center items-center gap-3 text-[10px] tracking-luxury uppercase text-taupe/60 dark:text-darkMuted/60">
         <span>Confidencialidad absoluta</span>
         <span>&middot;</span>
         <span>Cancelación en 1 clic</span>
@@ -1140,41 +785,41 @@
 
   </main>
 
-  <!-- ==================== 4. FOOTER (LIMPIO HASTA EL BORDE, SIN MARGEN DE REPRODUCTOR) ==================== -->
-  <footer class="border-t border-obsidian/[0.08] dark:border-darkBorder bg-stoneSoft/30 dark:bg-darkCard/20 pt-12 sm:pt-16 pb-12 sm:pb-16 transition-colors">
+  <!-- ==================== FOOTER ==================== -->
+  <footer class="border-t border-obsidian/[0.08] dark:border-darkBorder bg-stoneSoft/30 dark:bg-darkCard/20 pt-10 sm:pt-14 pb-10 sm:pb-14 transition-colors">
     <div class="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12">
       
-      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 sm:gap-10 pb-12 sm:pb-16 border-b border-obsidian/[0.08] dark:border-darkBorder">
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-8 pb-10 sm:pb-12 border-b border-obsidian/[0.08] dark:border-darkBorder">
         
         <!-- Columna 1: Marca y Cita -->
         <div class="md:col-span-6">
-          <span class="font-serif text-xl sm:text-2xl font-medium tracking-[0.22em] text-obsidian dark:text-darkText block mb-3">
+          <span class="font-serif text-xl sm:text-2xl font-medium tracking-[0.22em] text-obsidian dark:text-darkText block mb-2">
             SEBASTIÁN MENA
           </span>
-          <p class="font-serif italic text-sm sm:text-base text-taupe dark:text-darkMuted max-w-sm font-light leading-relaxed">
+          <p class="font-serif italic text-sm text-taupe dark:text-darkMuted max-w-sm font-light leading-relaxed">
             "El lujo verdadero no es poseer cosas con estrépito; es poseer nuestro tiempo y la serenidad de nuestra conciencia."
           </p>
         </div>
 
-        <!-- Columna 2: Mapa del Sitio (Actualizado a Preguntas) -->
+        <!-- Columna 2: Navegación -->
         <div class="md:col-span-3">
-          <span class="text-[10px] sm:text-[11px] uppercase tracking-luxury text-obsidian dark:text-darkText font-semibold block mb-3 sm:mb-4">
+          <span class="text-[10px] sm:text-[11px] uppercase tracking-luxury text-obsidian dark:text-darkText font-semibold block mb-3">
             Navegación
           </span>
-          <ul class="space-y-2 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted">
-            <li><a href="#episodios" class="hover:text-obsidian dark:hover:text-darkText transition-colors">Archivo Completo</a></li>
+          <ul class="space-y-2 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted font-mono">
+            <li><a href="#episodios" class="hover:text-obsidian dark:hover:text-darkText transition-colors">Archivo</a></li>
             <li><a href="#quien-soy" class="hover:text-obsidian dark:hover:text-darkText transition-colors">Biografía</a></li>
             <li><a href="#preguntas" class="hover:text-obsidian dark:hover:text-darkText transition-colors">Haz una Pregunta</a></li>
-            <li><a href="#carta-privada" class="hover:text-obsidian dark:hover:text-darkText transition-colors">Carta Dominical</a></li>
+            <li><a href="#carta-privada" class="hover:text-obsidian dark:hover:text-darkText transition-colors">Carta Privada</a></li>
           </ul>
         </div>
 
-        <!-- Columna 3: Conexión & Redes (3 Plataformas Oficiales Conectadas) -->
+        <!-- Columna 3: Redes & Plataformas -->
         <div class="md:col-span-3">
-          <span class="text-[10px] sm:text-[11px] uppercase tracking-luxury text-obsidian dark:text-darkText font-semibold block mb-3 sm:mb-4">
-            Redes &amp; Plataformas
+          <span class="text-[10px] sm:text-[11px] uppercase tracking-luxury text-obsidian dark:text-darkText font-semibold block mb-3">
+            Plataformas Oficiales
           </span>
-          <div class="flex flex-col space-y-2 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted">
+          <div class="flex flex-col space-y-2 text-xs uppercase tracking-luxury text-taupe dark:text-darkMuted font-mono">
             <a href="https://open.spotify.com/show/5HgLVac30t1FeFPRF7PeTR" target="_blank" rel="noopener noreferrer" class="hover:text-bronze dark:hover:text-accentGold transition-colors flex items-center space-x-2">
               <i data-lucide="disc" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
               <span>Spotify Podcast</span>
@@ -1187,93 +832,76 @@
               <i data-lucide="youtube" class="w-3.5 h-3.5 text-bronze dark:text-accentGold"></i>
               <span>YouTube Channel</span>
             </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="hover:text-obsidian dark:hover:text-darkText transition-colors flex items-center space-x-2">
-              <i data-lucide="instagram" class="w-3.5 h-3.5"></i>
-              <span>Instagram</span>
-            </a>
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="hover:text-obsidian dark:hover:text-darkText transition-colors flex items-center space-x-2">
-              <i data-lucide="twitter" class="w-3.5 h-3.5"></i>
-              <span>X (Twitter)</span>
-            </a>
           </div>
         </div>
 
       </div>
 
-      <!-- Barra inferior de Copyright -->
-      <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-taupe/70 dark:text-darkMuted/60 tracking-luxury uppercase gap-2 sm:gap-0 text-center sm:text-left">
-        <p>&copy; 2026 Sebastián Mena. Todos los derechos reservados.</p>
-        <p class="font-serif italic text-xs lowercase">diseñado bajo los principios del silencio y la proporción</p>
+      <!-- Barra Inferior de Copyright -->
+      <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-taupe dark:text-darkMuted tracking-luxury uppercase font-mono gap-3">
+        <p>&copy; 2026 Sebastián Mena &middot; La Otra Cara con Tyan. Todos los derechos reservados.</p>
+        <p class="font-serif italic text-xs lowercase">edición digital de autor</p>
       </div>
 
     </div>
   </footer>
 
-  <!-- ==================== JAVASCRIPT DE ALTO RENDIMIENTO (SIN SCRIPTS DE SIMULACIÓN) ==================== -->
+  <!-- ==================== SCRIPTS & INTERACCIÓN ==================== -->
   <script>
     // ----------------------------------------------------
-    // FILTRADO DE EPISODIOS
+    // NOTIFICACIÓN FLOTANTE (POPUP DE PREGUNTAS A LOS 2S)
     // ----------------------------------------------------
-    function filterEpisodes(category, ev) {
-      const rows = document.querySelectorAll('.episode-row');
-      const buttons = document.querySelectorAll('.filter-btn');
+    const floatingQuestionToast = document.getElementById('floatingQuestionToast');
 
-      buttons.forEach(btn => {
-        btn.classList.remove('active-filter', 'bg-obsidian', 'text-alabaster', 'dark:bg-darkText', 'dark:text-obsidian');
+    function showFloatingToast() {
+      if (floatingQuestionToast && !sessionStorage.getItem('dismissedQuestionToast')) {
+        floatingQuestionToast.classList.remove('translate-y-24', 'opacity-0', 'pointer-events-none');
+        floatingQuestionToast.classList.add('translate-y-0', 'opacity-100', 'pointer-events-auto');
+      }
+    }
+
+    function dismissFloatingToast() {
+      if (floatingQuestionToast) {
+        floatingQuestionToast.classList.remove('translate-y-0', 'opacity-100', 'pointer-events-auto');
+        floatingQuestionToast.classList.add('translate-y-24', 'opacity-0', 'pointer-events-none');
+        sessionStorage.setItem('dismissedQuestionToast', 'true');
+      }
+    }
+
+    function scrollToQuestions() {
+      dismissFloatingToast();
+      const target = document.getElementById('preguntas');
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth' });
+        setTimeout(() => {
+          const input = document.getElementById('questionText');
+          if (input) input.focus();
+        }, 650);
+      }
+    }
+
+    // ----------------------------------------------------
+    // FILTRADO DINÁMICO DE EPISODIOS
+    // ----------------------------------------------------
+    function filterEpisodes(category, event) {
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.remove('bg-obsidian', 'text-alabaster', 'dark:bg-darkText', 'dark:text-obsidian', 'active-filter');
         btn.classList.add('text-taupe', 'dark:text-darkMuted');
       });
 
-      const targetBtn = (ev && ev.currentTarget) ? ev.currentTarget : (ev && ev.target ? ev.target : window.event?.target);
-      if (targetBtn && targetBtn.classList) {
-        targetBtn.classList.add('active-filter', 'bg-obsidian', 'text-alabaster', 'dark:bg-darkText', 'dark:text-obsidian');
-        targetBtn.classList.remove('text-taupe', 'dark:text-darkMuted');
+      if (event && event.currentTarget) {
+        event.currentTarget.classList.add('bg-obsidian', 'text-alabaster', 'dark:bg-darkText', 'dark:text-obsidian', 'active-filter');
+        event.currentTarget.classList.remove('text-taupe', 'dark:text-darkMuted');
       }
 
+      const rows = document.querySelectorAll('.episode-row');
       rows.forEach(row => {
-        const rowCategory = row.getAttribute('data-category');
-        if (category === 'all' || rowCategory === category) {
+        if (category === 'all' || row.dataset.category === category) {
           row.style.display = '';
-          row.style.opacity = '1';
         } else {
           row.style.display = 'none';
-          row.style.opacity = '0';
         }
       });
-    }
-
-    // ----------------------------------------------------
-    // ACORDEÓN PILARES
-    // ----------------------------------------------------
-    function togglePilar(element) {
-      const content = element.querySelector('.pilar-content');
-      const icon = element.querySelector('.pilar-icon');
-      
-      const isOpen = !content.classList.contains('hidden');
-
-      document.querySelectorAll('.pilar-content').forEach(c => c.classList.add('hidden'));
-      document.querySelectorAll('.pilar-icon').forEach(i => i.classList.remove('rotate-180'));
-
-      if (!isOpen) {
-        content.classList.remove('hidden');
-        icon.classList.add('rotate-180');
-      }
-    }
-
-    // ----------------------------------------------------
-    // COMPARTIR ENLACE DE EPISODIO
-    // ----------------------------------------------------
-    function copyEpisodeLink(epId) {
-      const shareText = document.getElementById(`shareText-${epId}`);
-      if (navigator.clipboard) {
-        navigator.clipboard.writeText(window.location.origin + window.location.pathname + `#${epId}`);
-      }
-      if (shareText) {
-        const originalText = shareText.textContent;
-        shareText.textContent = "Enlace copiado";
-        setTimeout(() => {
-          shareText.textContent = originalText;
-        }, 2000);
-      }
     }
 
     // ----------------------------------------------------
@@ -1298,7 +926,7 @@
     }
 
     // ----------------------------------------------------
-    // NEWSLETTER SIMULADO
+    // FORMULARIO: CARTA PRIVADA
     // ----------------------------------------------------
     function handleNewsletter(event) {
       event.preventDefault();
@@ -1315,7 +943,7 @@
     }
 
     // ----------------------------------------------------
-    // MODO OSCURO LUXURY (TOGGLE)
+    // MODO OSCURO (TOGGLE)
     // ----------------------------------------------------
     const themeToggleBtn = document.getElementById('themeToggleBtn');
     
@@ -1325,15 +953,17 @@
       document.documentElement.classList.remove('dark');
     }
 
-    themeToggleBtn.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      if (document.documentElement.classList.contains('dark')) {
-        localStorage.setItem('theme', 'dark');
-      } else {
-        localStorage.setItem('theme', 'light');
-      }
-      lucide.createIcons();
-    });
+    if (themeToggleBtn) {
+      themeToggleBtn.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        if (document.documentElement.classList.contains('dark')) {
+          localStorage.setItem('theme', 'dark');
+        } else {
+          localStorage.setItem('theme', 'light');
+        }
+        lucide.createIcons();
+      });
+    }
 
     // ----------------------------------------------------
     // MENÚ MÓVIL FULL SCREEN EDITORIAL
@@ -1366,7 +996,7 @@
     });
 
     // ----------------------------------------------------
-    // INDICADOR DE LECTURA SUPERIOR (PROGRESS BAR SCROLL LISTENER)
+    // BARRA INDICADORA DE PROGRESO DE LECTURA SUPERIOR
     // ----------------------------------------------------
     const readingProgressBar = document.getElementById('readingProgressBar');
     function updateScrollProgress() {
@@ -1392,7 +1022,7 @@
         });
       }, {
         threshold: 0.08,
-        rootMargin: '0px 0px -40px 0px'
+        rootMargin: '0px 0px -30px 0px'
       });
 
       document.querySelectorAll('.scroll-reveal').forEach(el => {
@@ -1407,6 +1037,7 @@
       lucide.createIcons();
       updateScrollProgress();
       initScrollReveal();
+      setTimeout(showFloatingToast, 2000);
     });
   </script>
 </body>
