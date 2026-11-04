@@ -147,6 +147,101 @@
     </div>
   </aside>
 
+  <!-- ==================== MENSAJE FLOTANTE DE ÉXITO (TOAST SUPERIOR) ==================== -->
+  <aside id="successToast" 
+    class="fixed top-6 left-1/2 transform -translate-x-1/2 z-50 bg-[#121212]/95 border border-accentGold/50 text-darkText px-5 py-3 shadow-2xl backdrop-blur-md rounded-sm transition-all duration-500 opacity-0 pointer-events-none -translate-y-4 flex items-center gap-3">
+    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0"></span>
+    <span id="successToastText" class="font-serif text-sm sm:text-base italic text-white font-normal">Tu pregunta ha sido enviada al búnker de Tyan.</span>
+  </aside>
+
+  <!-- ==================== MODAL 1: PIN DE ACCESO ADMIN (SECRETO) ==================== -->
+  <div id="adminPinModal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="w-full max-w-sm bg-stoneSoft dark:bg-[#141414] border border-obsidian/[0.15] dark:border-accentGold/30 p-6 sm:p-8 shadow-2xl relative text-center rounded-sm">
+      
+      <!-- Botón Cerrar -->
+      <button onclick="closeAdminPinModal()" class="absolute top-3 right-3 text-taupe dark:text-darkMuted hover:text-obsidian dark:hover:text-darkText p-1.5 transition-colors">
+        <i data-lucide="x" class="w-4 h-4"></i>
+      </button>
+
+      <span class="text-[9px] uppercase tracking-luxury text-bronze dark:text-accentGold font-mono block mb-1">
+        ACCESO PRIVADO
+      </span>
+      <h3 class="font-serif text-2xl font-normal text-obsidian dark:text-darkText mb-2">
+        Búnker de Tyan
+      </h3>
+      <p class="text-xs text-taupe dark:text-darkMuted font-light mb-6">
+        Introduce tu código PIN editorial para gestionar las preguntas de la audiencia.
+      </p>
+
+      <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+        <div class="border-b border-obsidian/30 dark:border-darkBorder focus-within:border-bronze dark:focus-within:border-accentGold pb-2">
+          <input 
+            type="password" 
+            id="adminPinInput" 
+            placeholder="PIN (por defecto: 1909)" 
+            maxlength="8" 
+            required 
+            class="w-full text-center tracking-[0.4em] text-lg font-mono bg-transparent text-obsidian dark:text-darkText placeholder-taupe/40 dark:placeholder-darkMuted/40 focus:outline-none"
+          />
+        </div>
+        <p id="adminPinError" class="text-xs text-red-500 font-mono hidden">PIN incorrecto. Inténtalo de nuevo.</p>
+        <button 
+          type="submit" 
+          class="w-full py-3 bg-obsidian text-alabaster dark:bg-darkText dark:text-obsidian hover:bg-bronze dark:hover:bg-accentGold dark:hover:text-darkBg text-xs font-mono uppercase tracking-luxury transition-all font-medium"
+        >
+          DESBLOQUEAR BÚNKER &nearr;
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==================== MODAL 2: PANEL DE ADMINISTRACIÓN (DASHBOARD PRIVADO) ==================== -->
+  <div id="adminDashboardModal" class="fixed inset-0 z-50 bg-[#0C0C0C]/98 backdrop-blur-xl overflow-y-auto p-4 sm:p-8 transition-all duration-300 opacity-0 pointer-events-none">
+    <div class="max-w-4xl mx-auto my-auto min-h-screen py-8 flex flex-col justify-start">
+      
+      <!-- Cabecera del Dashboard -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 border-b border-white/10 gap-4 mb-8">
+        <div>
+          <div class="flex items-center gap-2 mb-1">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-[9px] uppercase tracking-luxury text-accentGold font-mono">BÚNKER EDITORIAL &middot; PANEL PRIVADO</span>
+          </div>
+          <h2 class="font-serif text-2xl sm:text-3xl text-white font-normal">
+            Buzón de Preguntas y Dilemas
+          </h2>
+          <div class="flex items-center gap-3 mt-1.5">
+            <span id="adminQuestionsCount" class="text-[10px] px-2.5 py-0.5 border border-accentGold/40 text-accentGold font-mono uppercase tracking-widest">
+              0 PREGUNTAS REGISTRADAS
+            </span>
+          </div>
+        </div>
+
+        <!-- Botones de Acción del Dashboard -->
+        <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+          <button onclick="logoutAdmin()" class="px-3.5 py-2 border border-red-500/40 text-red-400 hover:bg-red-500/10 text-xs font-mono uppercase tracking-luxury transition-all flex items-center gap-1.5" title="Bloquear panel">
+            <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+            <span>Cerrar sesión</span>
+          </button>
+          <button onclick="closeAdminDashboard()" class="w-9 h-9 rounded-full border border-white/20 text-white/80 hover:text-white hover:border-white transition-colors flex items-center justify-center" title="Minimizar vista">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Contenedor de Preguntas -->
+      <div id="adminQuestionsList" class="space-y-4 flex-grow">
+        <!-- Renderizado dinámico vía JavaScript -->
+      </div>
+
+      <!-- Pie del Dashboard -->
+      <div class="mt-12 pt-6 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between text-[10px] text-white/40 font-mono uppercase tracking-luxury gap-2">
+        <span>Almacenamiento seguro en navegador local (localStorage)</span>
+        <span>La Otra Cara con Tyan &middot; Edición 2026</span>
+      </div>
+
+    </div>
+  </div>
+
   <!-- ==================== HEADER / NAVEGACIÓN MINIMALISTA ==================== -->
   <header class="sticky top-0 z-40 w-full backdrop-blur-md bg-alabaster/90 dark:bg-darkBg/90 border-b border-obsidian/[0.08] dark:border-darkBorder transition-colors duration-500 relative">
     
@@ -231,6 +326,14 @@
           <i data-lucide="youtube" class="w-3.5 h-3.5 text-accentGold shrink-0"></i>
           <span class="truncate">YouTube</span>
         </a>
+      </div>
+
+      <!-- Acceso Admin Discreto en Móvil -->
+      <div class="pt-2 text-center">
+        <button onclick="closeMobileMenu(); openAdminAuth();" class="text-[9px] uppercase tracking-luxury text-white/40 hover:text-accentGold transition-colors inline-flex items-center gap-1 font-mono">
+          <i data-lucide="lock" class="w-2.5 h-2.5"></i>
+          <span>Acceso Admin</span>
+        </button>
       </div>
     </div>
   </div>
@@ -357,7 +460,7 @@
         </button>
       </div>
 
-      <!-- LISTA EDITORIAL DE EPISODIOS ULTRA LIMPIA (SIN TEXTOS LARGOS, SÓLO NÚMERO, TÍTULO Y BOTÓN ESCUCHAR) -->
+      <!-- LISTA EDITORIAL DE EPISODIOS ULTRA LIMPIA -->
       <div class="divide-y divide-obsidian/[0.08] dark:divide-darkBorder border-t border-obsidian/[0.08] dark:border-darkBorder" id="episodesList">
         
         <!-- Episodio 08 -->
@@ -661,7 +764,7 @@
 
     </section>
 
-    <!-- ==================== 4. SECCIÓN "PREGUNTAS" (ESPACIO DE REFLEXIÓN / APERTURA DE DEBATE) ==================== -->
+    <!-- ==================== 4. SECCIÓN "PREGUNTAS" (BUZÓN AL BÚNKER DE TYAN) ==================== -->
     <section id="preguntas" class="max-w-4xl mx-auto px-4 sm:px-8 py-14 sm:py-20 border-b border-obsidian/[0.08] dark:border-darkBorder scroll-reveal">
       
       <div class="text-center mb-8 sm:mb-10">
@@ -730,7 +833,7 @@
         </div>
 
         <p id="questionFeedback" class="text-xs text-bronze dark:text-accentGold mt-3 opacity-0 transition-opacity duration-300 font-light text-center">
-          Pregunta recibida con éxito. Si tiene filo y verdad, será desmenuzada en el próximo episodio.
+          Tu pregunta ha sido enviada al búnker de Tyan.
         </p>
       </form>
 
@@ -837,17 +940,35 @@
 
       </div>
 
-      <!-- Barra Inferior de Copyright -->
+      <!-- Barra Inferior de Copyright + Acceso Secreto Admin -->
       <div class="pt-6 sm:pt-8 flex flex-col sm:flex-row items-center justify-between text-[10px] sm:text-[11px] text-taupe dark:text-darkMuted tracking-luxury uppercase font-mono gap-3">
         <p>&copy; 2026 Sebastián Mena &middot; La Otra Cara con Tyan. Todos los derechos reservados.</p>
-        <p class="font-serif italic text-xs lowercase">edición digital de autor</p>
+        
+        <div class="flex items-center gap-4">
+          <!-- Acceso Secreto al Búnker Editorial -->
+          <button onclick="openAdminAuth()" class="hover:text-obsidian dark:hover:text-darkText transition-colors flex items-center gap-1.5 opacity-60 hover:opacity-100 cursor-pointer" title="Acceso al Búnker Editorial">
+            <i data-lucide="lock" class="w-3 h-3 text-bronze dark:text-accentGold"></i>
+            <span>Acceso Admin</span>
+          </button>
+
+          <span class="font-serif italic text-xs lowercase">edición digital de autor</span>
+        </div>
       </div>
 
     </div>
   </footer>
 
-  <!-- ==================== SCRIPTS & INTERACCIÓN ==================== -->
+  <!-- ==================== SCRIPTS & SISTEMA LOCAL DEL BÚNKER ==================== -->
   <script>
+    // ====================================================
+    // CONFIGURACIÓN DEL PANEL DE ADMINISTRACIÓN (BÚNKER)
+    // ====================================================
+    const ADMIN_CONFIG = {
+      pin: '1909', // <- PUEDES CAMBIAR AQUÍ TU PIN SECRETO
+      storageKey: 'tyan_podcast_questions',
+      sessionKey: 'tyan_admin_authenticated'
+    };
+
     // ----------------------------------------------------
     // NOTIFICACIÓN FLOTANTE (POPUP DE PREGUNTAS A LOS 2S)
     // ----------------------------------------------------
@@ -881,6 +1002,285 @@
     }
 
     // ----------------------------------------------------
+    // MENSAJE FLOTANTE DE ÉXITO (TOAST SUPERIOR)
+    // ----------------------------------------------------
+    function showSuccessToast(message) {
+      const toast = document.getElementById('successToast');
+      const textEl = document.getElementById('successToastText');
+      if (toast && textEl) {
+        textEl.textContent = message;
+        toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-4');
+        toast.classList.add('opacity-100', 'pointer-events-auto', 'translate-y-0');
+        setTimeout(() => {
+          toast.classList.remove('opacity-100', 'pointer-events-auto', 'translate-y-0');
+          toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-4');
+        }, 4500);
+      }
+    }
+
+    // ----------------------------------------------------
+    // HELPER: SANITIZACIÓN DE TEXTO CONTRA XSS
+    // ----------------------------------------------------
+    function escapeHTML(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    // ----------------------------------------------------
+    // FORMULARIO PÚBLICO: ENVÍO DE PREGUNTAS AL BÚNKER
+    // ----------------------------------------------------
+    function handleQuestionForm(event) {
+      event.preventDefault();
+      const nameInput = document.getElementById('questionName');
+      const emailInput = document.getElementById('questionEmail');
+      const textInput = document.getElementById('questionText');
+      const feedback = document.getElementById('questionFeedback');
+
+      if (textInput && textInput.value.trim()) {
+        const questionData = {
+          id: 'q_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
+          name: (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : 'Oyente Anónimo',
+          email: (emailInput && emailInput.value.trim()) ? emailInput.value.trim() : 'Sin correo especificado',
+          text: textInput.value.trim(),
+          timestamp: Date.now(),
+          dateStr: new Date().toLocaleDateString('es-ES', { 
+            day: '2-digit', 
+            month: 'short', 
+            year: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit'
+          })
+        };
+
+        // Guardado persistente en localStorage del navegador
+        try {
+          const stored = JSON.parse(localStorage.getItem(ADMIN_CONFIG.storageKey) || '[]');
+          stored.unshift(questionData);
+          localStorage.setItem(ADMIN_CONFIG.storageKey, JSON.stringify(stored));
+        } catch (e) {
+          console.error('Error al guardar pregunta en localStorage:', e);
+        }
+
+        // Limpiar formulario
+        if (nameInput) nameInput.value = '';
+        if (emailInput) emailInput.value = '';
+        textInput.value = '';
+
+        // Feedback visual debajo del formulario
+        if (feedback) {
+          feedback.textContent = 'Tu pregunta ha sido enviada al búnker de Tyan.';
+          feedback.classList.remove('opacity-0');
+          setTimeout(() => {
+            feedback.classList.add('opacity-0');
+          }, 6000);
+        }
+
+        // Notificación flotante de lujo
+        showSuccessToast('Tu pregunta ha sido enviada al búnker de Tyan.');
+      }
+    }
+
+    // ----------------------------------------------------
+    // ACCESO ADMIN SECRETO & CONTROL DE PIN
+    // ----------------------------------------------------
+    const adminPinModal = document.getElementById('adminPinModal');
+    const adminDashboardModal = document.getElementById('adminDashboardModal');
+    const adminPinInput = document.getElementById('adminPinInput');
+    const adminPinError = document.getElementById('adminPinError');
+
+    function openAdminAuth() {
+      if (sessionStorage.getItem(ADMIN_CONFIG.sessionKey) === 'true') {
+        openAdminDashboard();
+      } else {
+        if (adminPinModal) {
+          adminPinModal.classList.remove('opacity-0', 'pointer-events-none');
+          adminPinModal.classList.add('opacity-100', 'pointer-events-auto');
+          if (adminPinInput) {
+            adminPinInput.value = '';
+            setTimeout(() => adminPinInput.focus(), 150);
+          }
+          if (adminPinError) adminPinError.classList.add('hidden');
+          document.body.style.overflow = 'hidden';
+        }
+      }
+    }
+
+    function closeAdminPinModal() {
+      if (adminPinModal) {
+        adminPinModal.classList.remove('opacity-100', 'pointer-events-auto');
+        adminPinModal.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function handleAdminLogin(event) {
+      event.preventDefault();
+      const enteredPin = adminPinInput ? adminPinInput.value.trim() : '';
+
+      if (enteredPin === ADMIN_CONFIG.pin) {
+        sessionStorage.setItem(ADMIN_CONFIG.sessionKey, 'true');
+        closeAdminPinModal();
+        openAdminDashboard();
+      } else {
+        if (adminPinError) {
+          adminPinError.classList.remove('hidden');
+          adminPinInput.value = '';
+          adminPinInput.focus();
+        }
+      }
+    }
+
+    // ----------------------------------------------------
+    // DASHBOARD PRIVADO (RENDERIZADO Y GESTIÓN)
+    // ----------------------------------------------------
+    function openAdminDashboard() {
+      renderAdminQuestions();
+      if (adminDashboardModal) {
+        adminDashboardModal.classList.remove('opacity-0', 'pointer-events-none');
+        adminDashboardModal.classList.add('opacity-100', 'pointer-events-auto');
+        document.body.style.overflow = 'hidden';
+        lucide.createIcons();
+      }
+    }
+
+    function closeAdminDashboard() {
+      if (adminDashboardModal) {
+        adminDashboardModal.classList.remove('opacity-100', 'pointer-events-auto');
+        adminDashboardModal.classList.add('opacity-0', 'pointer-events-none');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function logoutAdmin() {
+      sessionStorage.removeItem(ADMIN_CONFIG.sessionKey);
+      closeAdminDashboard();
+      showSuccessToast('Sesión de Admin cerrada.');
+    }
+
+    function getStoredQuestions() {
+      try {
+        return JSON.parse(localStorage.getItem(ADMIN_CONFIG.storageKey) || '[]');
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function renderAdminQuestions() {
+      const container = document.getElementById('adminQuestionsList');
+      const counterEl = document.getElementById('adminQuestionsCount');
+      const questions = getStoredQuestions();
+
+      if (counterEl) {
+        counterEl.textContent = `${questions.length} PREGUNTA${questions.length === 1 ? '' : 'S'} REGISTRADA${questions.length === 1 ? '' : 'S'}`;
+      }
+
+      if (!container) return;
+
+      if (questions.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-16 px-4 border border-white/10 bg-white/[0.02] rounded-sm">
+            <i data-lucide="inbox" class="w-10 h-10 text-white/30 mx-auto mb-3"></i>
+            <p class="font-serif text-xl text-white font-normal">El búnker está en silencio.</p>
+            <p class="text-xs text-white/50 font-light mt-1 max-w-sm mx-auto">
+              No hay preguntas pendientes. Cada dilema o tema enviado por los oyentes desde la web se guardará automáticamente aquí.
+            </p>
+          </div>
+        `;
+        lucide.createIcons();
+        return;
+      }
+
+      container.innerHTML = questions.map(q => `
+        <article class="border border-white/10 bg-white/[0.03] p-5 sm:p-6 transition-all hover:border-accentGold/40 rounded-sm">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-white/10 gap-2">
+            <div>
+              <span class="font-serif text-lg sm:text-xl text-white font-medium block">
+                ${escapeHTML(q.name)}
+              </span>
+              <span class="text-xs text-accentGold/90 font-mono flex items-center gap-1.5 mt-0.5">
+                <i data-lucide="mail" class="w-3 h-3 text-accentGold"></i>
+                <span>${escapeHTML(q.email)}</span>
+              </span>
+            </div>
+            <span class="text-[10px] text-white/40 font-mono tracking-luxury uppercase">
+              ${escapeHTML(q.dateStr)}
+            </span>
+          </div>
+
+          <div class="my-4 pl-3.5 border-l-2 border-accentGold/60 bg-white/[0.01] py-2">
+            <p class="font-serif italic text-base sm:text-lg text-white/95 leading-relaxed font-light">
+              "${escapeHTML(q.text)}"
+            </p>
+          </div>
+
+          <div class="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-white/5 text-[10px] font-mono uppercase tracking-luxury">
+            <!-- Copiar Correo -->
+            <button onclick="copyAdminEmail('${escapeHTML(q.email)}', this)" class="px-3 py-1.5 border border-white/15 hover:border-accentGold hover:text-accentGold text-white/80 transition-colors flex items-center gap-1.5">
+              <i data-lucide="copy" class="w-3 h-3"></i>
+              <span>Copiar correo</span>
+            </button>
+
+            <!-- Copiar al Guion -->
+            <button onclick="copyToScript('${q.id}', this)" class="px-3 py-1.5 border border-white/15 hover:border-accentGold hover:text-accentGold text-white/80 transition-colors flex items-center gap-1.5">
+              <i data-lucide="file-text" class="w-3 h-3"></i>
+              <span>Copiar al guion</span>
+            </button>
+
+            <!-- Eliminar -->
+            <button onclick="deleteQuestion('${q.id}')" class="px-3 py-1.5 border border-red-500/30 hover:border-red-500 text-red-400 hover:text-red-300 transition-colors flex items-center gap-1.5">
+              <i data-lucide="trash-2" class="w-3 h-3"></i>
+              <span>Eliminar</span>
+            </button>
+          </div>
+        </article>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    function copyAdminEmail(email, btn) {
+      if (navigator.clipboard && email && email !== 'Sin correo especificado') {
+        navigator.clipboard.writeText(email);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i><span>¡Copiado!</span>`;
+        lucide.createIcons();
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          lucide.createIcons();
+        }, 2000);
+      }
+    }
+
+    function copyToScript(questionId, btn) {
+      const questions = getStoredQuestions();
+      const item = questions.find(q => q.id === questionId);
+      if (item && navigator.clipboard) {
+        const formatted = `=== PREGUNTA PARA EL GUION ===\nOYENTE: ${item.name}\nCORREO: ${item.email}\nFECHA: ${item.dateStr}\nDILEMA / PREGUNTA:\n"${item.text}"\n==============================`;
+        navigator.clipboard.writeText(formatted);
+        const originalHTML = btn.innerHTML;
+        btn.innerHTML = `<i data-lucide="check" class="w-3 h-3 text-emerald-400"></i><span>¡Guion copiado!</span>`;
+        lucide.createIcons();
+        setTimeout(() => {
+          btn.innerHTML = originalHTML;
+          lucide.createIcons();
+        }, 2000);
+      }
+    }
+
+    function deleteQuestion(questionId) {
+      let questions = getStoredQuestions();
+      questions = questions.filter(q => q.id !== questionId);
+      localStorage.setItem(ADMIN_CONFIG.storageKey, JSON.stringify(questions));
+      renderAdminQuestions();
+      showSuccessToast('Pregunta eliminada del búnker.');
+    }
+
+    // ----------------------------------------------------
     // FILTRADO DINÁMICO DE EPISODIOS
     // ----------------------------------------------------
     function filterEpisodes(category, event) {
@@ -902,27 +1302,6 @@
           row.style.display = 'none';
         }
       });
-    }
-
-    // ----------------------------------------------------
-    // FORMULARIO: HAZ UNA PREGUNTA / ABRE EL DEBATE
-    // ----------------------------------------------------
-    function handleQuestionForm(event) {
-      event.preventDefault();
-      const nameInput = document.getElementById('questionName');
-      const emailInput = document.getElementById('questionEmail');
-      const textInput = document.getElementById('questionText');
-      const feedback = document.getElementById('questionFeedback');
-
-      if (textInput && textInput.value) {
-        feedback.classList.remove('opacity-0');
-        if (nameInput) nameInput.value = '';
-        if (emailInput) emailInput.value = '';
-        textInput.value = '';
-        setTimeout(() => {
-          feedback.classList.add('opacity-0');
-        }, 6000);
-      }
     }
 
     // ----------------------------------------------------
