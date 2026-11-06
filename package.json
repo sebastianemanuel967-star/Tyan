@@ -1,0 +1,9 @@
+{
+  "name": "tyango",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TYANGO Official Website",
+  "scripts": {
+    "start": "node server.js"
+  }
+}

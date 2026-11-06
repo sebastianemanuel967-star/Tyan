@@ -1,0 +1,2654 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TYANGO — Frescura y sabor en cada creación</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       TYANGO DESIGN SYSTEM — TOKENS & VARIABLES GLOBALES
+    ═══════════════════════════════════════════════════════════════ */
+    :root {
+      /* Paleta de Color Oficial */
+      --purple-dark: #4A1942;
+      --purple-mid: #7B5B7B;
+      --purple-light: #9B7B9B;
+      --purple-surface: #5E2654;
+      --lime: #D4D98C;
+      --lime-light: #E8EDB8;
+      --lime-hover: #E2E896;
+      --cream: #FFF9F0;
+      --white: #FFFFFF;
+      --surface-light: #FFFDF9;
+
+      /* Tipografía & Escala */
+      --font-main: 'Nunito', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+      /* Sombras Coherentes */
+      --shadow-sm: 0 2px 8px rgba(74, 25, 66, 0.05);
+      --shadow-card: 0 4px 18px rgba(74, 25, 66, 0.06);
+      --shadow-hover: 0 12px 32px rgba(74, 25, 66, 0.12);
+      --shadow-dropdown: -4px 8px 30px rgba(74, 25, 66, 0.28);
+      --shadow-modal: 0 20px 60px rgba(74, 25, 66, 0.35);
+
+      /* Radios de Borde */
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 22px;
+      --radius-xl: 26px;
+      --radius-full: 9999px;
+
+      /* Transiciones Fluidas */
+      --transition-fast: 0.18s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-base: 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-bounce: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    /* Reset & Base */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: 16px;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font-main);
+      background-color: var(--cream);
+      color: var(--purple-dark);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Scrollbar personalizada */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: var(--cream); }
+    ::-webkit-scrollbar-thumb { background: var(--purple-mid); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--purple-dark); }
+
+    /* Accesibilidad: Focus visible unificado */
+    :focus-visible {
+      outline: 2.5px solid var(--lime);
+      outline-offset: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       HEADER — NAVEGACIÓN PERMANENTE & HORIZONTAL
+       TYANGO | TYHOT | TYICE | TYBOWLS | ☰
+    ═══════════════════════════════════════════════════════════════ */
+    .header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: var(--purple-dark);
+      height: 64px;
+      transition: box-shadow var(--transition-base), background var(--transition-base);
+    }
+    .header.scrolled {
+      box-shadow: 0 4px 24px rgba(74, 25, 66, 0.4);
+      background: rgba(74, 25, 66, 0.96);
+      backdrop-filter: blur(8px);
+    }
+
+    .header-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+    }
+
+    /* Logo TYANGO */
+    .header-logo {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 6px 4px;
+      border-radius: var(--radius-sm);
+      transition: opacity var(--transition-fast), transform var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+    .header-logo:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+    .header-logo:active {
+      transform: scale(0.97);
+    }
+    .header-logo-img {
+      height: 38px;
+      width: auto;
+      max-width: 120px;
+      object-fit: contain;
+      display: block;
+    }
+
+    /* Navegación central (TYHOT, TYICE, TYBOWLS) */
+    .header-nav {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      height: 100%;
+    }
+
+    .header-nav-btn {
+      height: 64px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      background: none;
+      border: none;
+      font-family: var(--font-main);
+      font-size: 1.18rem;
+      font-weight: 900;
+      color: var(--purple-mid);
+      cursor: pointer;
+      transition: color var(--transition-fast), transform var(--transition-fast);
+      white-space: nowrap;
+      position: relative;
+    }
+    .header-nav-btn:hover {
+      color: var(--cream);
+    }
+    .header-nav-btn.active {
+      color: var(--lime);
+    }
+    .header-nav-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 14px;
+      right: 14px;
+      height: 3px;
+      background: var(--lime);
+      border-radius: 3px 3px 0 0;
+    }
+
+    /* Botón Hamburguesa ☰ (Opciones secundarias) */
+    .header-hamburger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      padding: 10px;
+      background: none;
+      border: none;
+      border-radius: var(--radius-sm);
+      transition: opacity var(--transition-fast);
+    }
+    .header-hamburger:hover {
+      opacity: 0.85;
+    }
+    .header-hamburger span {
+      width: 22px;
+      height: 2.5px;
+      background: var(--lime);
+      border-radius: 2px;
+      transition: all var(--transition-fast);
+    }
+
+    /* Menú secundario desplegable (Desktop) */
+    .secondary-menu {
+      display: none;
+      position: fixed;
+      top: 64px;
+      right: 0;
+      background: var(--purple-dark);
+      border-radius: 0 0 0 var(--radius-md);
+      padding: 12px 0;
+      min-width: 230px;
+      box-shadow: var(--shadow-dropdown);
+      z-index: 99;
+      border-top: 1px solid rgba(212, 217, 140, 0.12);
+      border-left: 1px solid rgba(212, 217, 140, 0.08);
+      animation: fadeIn var(--transition-fast);
+    }
+    .secondary-menu.open { display: block; }
+    .secondary-menu a {
+      display: block;
+      padding: 10px 24px;
+      color: var(--purple-light);
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all var(--transition-fast);
+    }
+    .secondary-menu a:hover {
+      color: var(--lime);
+      background: rgba(212, 217, 140, 0.08);
+      padding-left: 28px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOBILE DRAWER MENU & BACKDROP
+    ═══════════════════════════════════════════════════════════════ */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(45, 12, 39, 0.72);
+      backdrop-filter: blur(6px);
+      z-index: 200;
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+    .drawer-backdrop.open {
+      display: block;
+      opacity: 1;
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: min(320px, 86vw);
+      height: 100vh;
+      height: 100dvh;
+      background: var(--purple-dark);
+      color: var(--cream);
+      z-index: 201;
+      box-shadow: -8px 0 36px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      transform: translateX(100%);
+      transition: transform var(--transition-base);
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    .mobile-drawer.open {
+      transform: translateX(0);
+    }
+
+    .drawer-header {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid rgba(212, 217, 140, 0.12);
+      background: rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+    .drawer-logo img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+    }
+    .drawer-close-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(212, 217, 140, 0.2);
+      color: var(--lime);
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
+      font-size: 1.15rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .drawer-close-btn:hover {
+      background: var(--lime);
+      color: var(--purple-dark);
+    }
+    .drawer-close-btn:active {
+      transform: scale(0.92);
+    }
+
+    .drawer-body {
+      padding: 20px;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .drawer-section-title {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--lime);
+      margin-bottom: 4px;
+    }
+    .drawer-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .drawer-nav-item {
+      width: 100%;
+      min-height: 50px;
+      padding: 10px 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      color: var(--cream);
+      font-family: var(--font-main);
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-align: left;
+      transition: all var(--transition-fast);
+    }
+    .drawer-nav-item:hover {
+      background: rgba(212, 217, 140, 0.12);
+      border-color: rgba(212, 217, 140, 0.25);
+      color: var(--lime);
+    }
+    .drawer-nav-item:active {
+      transform: scale(0.98);
+    }
+    .drawer-nav-item.active {
+      background: var(--lime);
+      color: var(--purple-dark);
+      border-color: var(--lime);
+      box-shadow: 0 4px 14px rgba(212, 217, 140, 0.25);
+    }
+    .drawer-nav-item .dni-icon {
+      font-size: 1.35rem;
+      flex-shrink: 0;
+    }
+    .drawer-nav-item .dni-text {
+      flex-grow: 1;
+      letter-spacing: 0.02em;
+    }
+    .drawer-nav-item .dni-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: var(--radius-sm);
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--lime);
+    }
+    .drawer-nav-item.active .dni-tag {
+      background: var(--purple-dark);
+      color: var(--lime);
+    }
+
+    .drawer-divider {
+      height: 1px;
+      background: rgba(212, 217, 140, 0.12);
+      margin: 4px 0;
+    }
+    .drawer-sub-links {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .drawer-sub-link {
+      padding: 10px 14px;
+      color: var(--purple-light);
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all var(--transition-fast);
+    }
+    .drawer-sub-link:hover {
+      color: var(--lime);
+      background: rgba(212, 217, 140, 0.08);
+      padding-left: 18px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SISTEMA DE PÁGINAS (SPA)
+    ═══════════════════════════════════════════════════════════════ */
+    .page {
+      display: none;
+      margin-top: 64px;
+      min-height: calc(100vh - 64px);
+      opacity: 0;
+      transition: opacity var(--transition-base);
+    }
+    .page.active { display: block; }
+    .page.visible { opacity: 1; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       COMPONENTES COMUNES: BOTONES & BADGES
+    ═══════════════════════════════════════════════════════════════ */
+    .btn-primary {
+      background: var(--purple-dark);
+      color: var(--lime);
+      padding: 13px 32px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: 0.88rem;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-family: var(--font-main);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(74, 25, 66, 0.2);
+      white-space: nowrap;
+    }
+    .btn-primary:hover {
+      background: var(--purple-surface);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(74, 25, 66, 0.28);
+    }
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .btn-secondary {
+      background: var(--lime);
+      color: var(--purple-dark);
+      padding: 13px 32px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: 0.88rem;
+      border: none;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      font-family: var(--font-main);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      box-shadow: 0 4px 16px rgba(212, 217, 140, 0.25);
+      white-space: nowrap;
+    }
+    .btn-secondary:hover {
+      background: var(--lime-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(212, 217, 140, 0.35);
+    }
+    .btn-secondary:active {
+      transform: scale(0.98);
+    }
+
+    .section-badge {
+      display: inline-block;
+      background: var(--purple-dark);
+      color: var(--lime);
+      padding: 5px 16px;
+      border-radius: var(--radius-full);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: clamp(1.85rem, 4vw, 2.35rem);
+      font-weight: 900;
+      color: var(--purple-dark);
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      font-size: 0.98rem;
+      color: var(--purple-mid);
+      max-width: 520px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PÁGINA PRINCIPAL — SECCIONES OPTIMIZADAS
+    ═══════════════════════════════════════════════════════════════ */
+
+    /* SECCIÓN 1: HERO */
+    .home-hero {
+      padding: 64px 20px 52px;
+      min-height: calc(82vh - 64px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--cream) 0%, var(--lime-light) 45%, var(--lime) 100%);
+    }
+    .home-blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.12;
+      pointer-events: none;
+      animation: blobFloat 8s ease-in-out infinite;
+    }
+    @keyframes blobFloat {
+      0%, 100% { transform: translateY(0) scale(1); }
+      50% { transform: translateY(-20px) scale(1.04); }
+    }
+    .home-hero h1 {
+      font-size: clamp(2.4rem, 6vw, 3.8rem);
+      font-weight: 900;
+      line-height: 1.08;
+      color: var(--purple-dark);
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+    .home-hero h1 em {
+      font-style: normal;
+      background: linear-gradient(135deg, var(--purple-dark), var(--purple-mid));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .home-hero .hero-tagline {
+      font-size: clamp(1.1rem, 2.5vw, 1.35rem);
+      font-weight: 800;
+      color: var(--purple-dark);
+      margin-bottom: 8px;
+    }
+    .home-hero .hero-desc {
+      font-size: 0.96rem;
+      color: var(--purple-mid);
+      line-height: 1.6;
+      max-width: 480px;
+      margin: 0 auto 28px;
+    }
+    .hero-btn-group {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* SECCIÓN 2: ¿QUÉ ES TYANGO? */
+    .home-about {
+      padding: 56px 20px;
+      text-align: center;
+      background: var(--cream);
+    }
+    .home-about p {
+      font-size: 0.98rem;
+      color: var(--purple-mid);
+      line-height: 1.75;
+      max-width: 580px;
+      margin: 0 auto;
+    }
+    .home-about p + p {
+      margin-top: 14px;
+    }
+
+    /* SECCIÓN 3: DESCUBRE TYANGO */
+    .home-discover {
+      padding: 56px 20px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--lime-light) 100%);
+    }
+    .discover-grid {
+      max-width: 1040px;
+      margin: 32px auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+    }
+    .discover-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 34px 22px;
+      text-align: center;
+      border: 1.5px solid rgba(74, 25, 66, 0.06);
+      transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+      cursor: pointer;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: var(--shadow-card);
+    }
+    .discover-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--purple-light);
+    }
+    .discover-card:active {
+      transform: translateY(-2px);
+    }
+    .discover-card .dc-emoji {
+      font-size: 3rem;
+      display: block;
+      margin-bottom: 12px;
+      transition: transform var(--transition-base);
+    }
+    .discover-card:hover .dc-emoji {
+      transform: scale(1.15) rotate(-6deg);
+    }
+    .discover-card .dc-name {
+      font-size: 1.3rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+      margin-bottom: 6px;
+    }
+    .discover-card .dc-desc {
+      font-size: 0.85rem;
+      color: var(--purple-mid);
+      line-height: 1.5;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .discover-card .dc-btn {
+      background: var(--purple-dark);
+      color: var(--lime);
+      padding: 9px 24px;
+      border-radius: var(--radius-full);
+      font-weight: 800;
+      font-size: 0.78rem;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font-main);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      transition: all var(--transition-fast);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .discover-card .dc-btn:hover {
+      background: var(--purple-surface);
+      transform: translateY(-1px);
+    }
+
+    /* SECCIÓN 4: FAVORITOS */
+    .home-favs {
+      padding: 56px 20px;
+      background: var(--cream);
+      text-align: center;
+    }
+    .favs-grid {
+      max-width: 960px;
+      margin: 32px auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    /* TARJETAS DE PRODUCTO (Catálogos y Favoritos) */
+    .card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid rgba(74, 25, 66, 0.06);
+      transition: transform var(--transition-base), box-shadow var(--transition-base);
+      cursor: pointer;
+      opacity: 0;
+      transform: translateY(18px);
+      box-shadow: var(--shadow-sm);
+      text-align: left;
+    }
+    .card.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-hover);
+    }
+    .card-img {
+      height: 175px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+    }
+    .card-photo {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform var(--transition-base);
+    }
+    .card:hover .card-photo {
+      transform: scale(1.06);
+    }
+    .card-emoji {
+      font-size: 3.8rem;
+      transition: transform var(--transition-base);
+    }
+    .card:hover .card-emoji {
+      transform: scale(1.12) rotate(-5deg);
+    }
+    .card-body {
+      padding: 18px;
+    }
+    .card-badge {
+      display: inline-block;
+      padding: 3px 9px;
+      border-radius: var(--radius-sm);
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+    }
+    .card-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--purple-dark);
+      margin-bottom: 4px;
+    }
+    .card-desc {
+      font-size: 0.8rem;
+      color: var(--purple-mid);
+      line-height: 1.45;
+      margin-bottom: 12px;
+      min-height: 38px;
+    }
+    .card-price {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+      display: block;
+    }
+
+    /* SECCIÓN 5: PERSONALIZA TU TYANGO */
+    .home-customizer {
+      padding: 60px 20px;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--lime-light) 50%, var(--cream) 100%);
+      position: relative;
+    }
+    .customizer-layout {
+      max-width: 1100px;
+      margin: 32px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 360px;
+      gap: 28px;
+      align-items: start;
+    }
+    .customizer-steps {
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .step-card {
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid rgba(74, 25, 66, 0.06);
+      box-shadow: var(--shadow-sm);
+    }
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .step-title-box {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .step-num {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--purple-dark);
+      color: var(--lime);
+      font-size: 0.82rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-title {
+      font-size: 1.15rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+    }
+    .counter-pill {
+      background: var(--cream);
+      color: var(--purple-dark);
+      border: 1.5px solid var(--purple-mid);
+      padding: 3px 12px;
+      border-radius: var(--radius-full);
+      font-size: 0.76rem;
+      font-weight: 800;
+      transition: all var(--transition-fast);
+    }
+    .counter-pill.limit-reached {
+      background: var(--purple-dark);
+      color: var(--lime);
+      border-color: var(--purple-dark);
+    }
+
+    .mode-toggle {
+      display: flex;
+      gap: 6px;
+      background: var(--cream);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin-bottom: 16px;
+      border: 1px solid rgba(74, 25, 66, 0.06);
+    }
+    .mode-btn {
+      flex: 1;
+      padding: 8px 12px;
+      border-radius: var(--radius-sm);
+      border: none;
+      background: transparent;
+      font-family: var(--font-main);
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: var(--purple-mid);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .mode-btn.active {
+      background: var(--purple-dark);
+      color: var(--lime);
+      box-shadow: 0 3px 10px rgba(74, 25, 66, 0.18);
+    }
+
+    .ingredient-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(115px, 1fr));
+      gap: 10px;
+    }
+    .ingredient-item {
+      background: var(--cream);
+      border: 2px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 12px 8px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+      position: relative;
+    }
+    .ingredient-item:hover:not(.disabled) {
+      transform: translateY(-2px);
+      border-color: var(--purple-light);
+      background: var(--white);
+    }
+    .ingredient-item.selected {
+      background: #F9F2FB;
+      border-color: var(--purple-dark);
+      box-shadow: 0 4px 14px rgba(74, 25, 66, 0.1);
+      transform: translateY(-2px);
+    }
+    .ingredient-item.selected::after {
+      content: '✓';
+      position: absolute;
+      top: 5px;
+      right: 6px;
+      width: 16px;
+      height: 16px;
+      background: var(--purple-dark);
+      color: var(--lime);
+      border-radius: 50%;
+      font-size: 0.6rem;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .ingredient-item.disabled {
+      opacity: 0.38;
+      cursor: not-allowed;
+      filter: grayscale(0.5);
+      transform: scale(0.97);
+    }
+    .ingredient-emoji {
+      font-size: 2rem;
+      display: block;
+      margin-bottom: 4px;
+      transition: transform var(--transition-fast);
+    }
+    .ingredient-item:hover:not(.disabled) .ingredient-emoji {
+      transform: scale(1.12) rotate(-5deg);
+    }
+    .ingredient-name {
+      font-size: 0.78rem;
+      font-weight: 800;
+      color: var(--purple-dark);
+      letter-spacing: 0.01em;
+    }
+
+    .limit-notice {
+      display: none;
+      margin-top: 12px;
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      background: #FFF3EC;
+      border: 1px solid #FFD8CC;
+      color: #D9531E;
+      font-size: 0.78rem;
+      font-weight: 800;
+      align-items: center;
+      gap: 6px;
+      animation: fadeIn var(--transition-fast);
+    }
+    .limit-notice.show { display: flex; }
+
+    .size-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+    .size-card {
+      background: var(--cream);
+      border: 2px solid transparent;
+      border-radius: var(--radius-md);
+      padding: 16px 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .size-card:hover {
+      border-color: var(--purple-light);
+      background: var(--white);
+    }
+    .size-card.selected {
+      background: #F9F2FB;
+      border-color: var(--purple-dark);
+      box-shadow: 0 4px 16px rgba(74, 25, 66, 0.1);
+    }
+    .size-badge {
+      display: inline-block;
+      background: var(--lime);
+      color: var(--purple-dark);
+      padding: 2px 7px;
+      border-radius: var(--radius-sm);
+      font-size: 0.62rem;
+      font-weight: 900;
+      margin-bottom: 4px;
+    }
+    .size-name {
+      font-size: 1rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+      margin-bottom: 2px;
+    }
+    .size-price {
+      font-size: 1.05rem;
+      font-weight: 900;
+      color: var(--purple-mid);
+    }
+    .size-card.selected .size-price {
+      color: var(--purple-dark);
+    }
+
+    /* Panel de Resumen Lateral */
+    .summary-panel {
+      position: sticky;
+      top: 80px;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1.5px solid rgba(74, 25, 66, 0.08);
+      box-shadow: var(--shadow-card);
+    }
+    .summary-title {
+      font-size: 1.25rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+      border-bottom: 1.5px solid rgba(74, 25, 66, 0.06);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+    }
+    .summary-items {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .summary-row {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .summary-label {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--purple-light);
+    }
+    .summary-value {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--purple-dark);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+    }
+    .summary-tag {
+      background: var(--cream);
+      border: 1px solid rgba(74, 25, 66, 0.1);
+      padding: 2px 8px;
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+    }
+    .summary-empty {
+      color: #A08FA0;
+      font-style: italic;
+      font-weight: 600;
+      font-size: 0.82rem;
+    }
+
+    .qty-stepper {
+      display: inline-flex;
+      align-items: center;
+      background: var(--cream);
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(74, 25, 66, 0.1);
+      padding: 2px 4px;
+      gap: 8px;
+      margin-top: 2px;
+    }
+    .qty-btn {
+      width: 26px;
+      height: 26px;
+      border-radius: 6px;
+      border: none;
+      background: var(--white);
+      color: var(--purple-dark);
+      font-weight: 900;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+    }
+    .qty-btn:hover {
+      background: var(--purple-dark);
+      color: var(--lime);
+    }
+    .qty-num {
+      font-size: 0.9rem;
+      font-weight: 900;
+      min-width: 18px;
+      text-align: center;
+      color: var(--purple-dark);
+    }
+
+    .witty-banner {
+      display: none;
+      padding: 10px 12px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, #4A1942, #7B5B7B);
+      color: var(--lime);
+      font-size: 0.78rem;
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 16px;
+      animation: bounceIn var(--transition-bounce);
+    }
+    .witty-banner.show { display: flex; }
+
+    .summary-total-box {
+      border-top: 1.5px solid rgba(74, 25, 66, 0.06);
+      padding-top: 14px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+    .total-label {
+      font-size: 0.95rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+    }
+    .total-amount {
+      font-size: 1.45rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+    }
+
+    .disclaimer-card {
+      background: #FFFBF2;
+      border: 1.5px solid #F6E2B8;
+      border-radius: var(--radius-md);
+      padding: 12px;
+      margin-bottom: 16px;
+    }
+    .disclaimer-title {
+      font-size: 0.74rem;
+      font-weight: 900;
+      color: #9C5A00;
+      margin-bottom: 4px;
+    }
+    .disclaimer-text {
+      font-size: 0.7rem;
+      color: #7A5B20;
+      line-height: 1.4;
+      margin-bottom: 8px;
+    }
+    .disclaimer-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 7px;
+      cursor: pointer;
+      font-size: 0.74rem;
+      font-weight: 800;
+      color: var(--purple-dark);
+      user-select: none;
+    }
+    .disclaimer-check input[type="checkbox"] {
+      margin-top: 2px;
+      accent-color: var(--purple-dark);
+      cursor: pointer;
+      width: 15px;
+      height: 15px;
+    }
+
+    .btn-create-tyango {
+      width: 100%;
+      background: var(--purple-dark);
+      color: var(--lime);
+      border: none;
+      padding: 14px 20px;
+      border-radius: var(--radius-full);
+      font-family: var(--font-main);
+      font-size: 0.88rem;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      box-shadow: 0 6px 18px rgba(74, 25, 66, 0.22);
+    }
+    .btn-create-tyango:hover:not(:disabled) {
+      background: var(--purple-surface);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(74, 25, 66, 0.3);
+    }
+    .btn-create-tyango:disabled {
+      background: #D8CED5;
+      color: #9C8B96;
+      cursor: not-allowed;
+      box-shadow: none;
+      transform: none;
+    }
+
+    /* SECCIÓN 6: EL ADN DE TYANGO */
+    .home-dna {
+      padding: 56px 20px;
+      text-align: center;
+      background: linear-gradient(180deg, var(--lime-light) 0%, var(--cream) 100%);
+    }
+    .dna-grid {
+      max-width: 880px;
+      margin: 32px auto 0;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 20px;
+    }
+    .dna-item {
+      text-align: center;
+      padding: 20px 14px;
+      background: var(--white);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-sm);
+      border: 1px solid rgba(74, 25, 66, 0.04);
+      transition: transform var(--transition-fast);
+    }
+    .dna-item:hover {
+      transform: translateY(-3px);
+    }
+    .dna-item .dna-emoji {
+      font-size: 2.3rem;
+      display: block;
+      margin-bottom: 10px;
+    }
+    .dna-item .dna-title {
+      font-size: 0.85rem;
+      font-weight: 900;
+      color: var(--purple-dark);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .dna-item .dna-desc {
+      font-size: 0.78rem;
+      color: var(--purple-mid);
+      line-height: 1.45;
+    }
+
+    /* SECCIÓN 7: LLAMADO FINAL */
+    .home-final-cta {
+      padding: 68px 20px;
+      background: var(--purple-dark);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-circle {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(212, 217, 140, 0.08);
+      pointer-events: none;
+    }
+    .home-final-cta h2 {
+      font-size: clamp(1.8rem, 4vw, 2.35rem);
+      font-weight: 900;
+      color: var(--cream);
+      margin-bottom: 8px;
+      line-height: 1.15;
+      position: relative;
+      z-index: 2;
+    }
+    .home-final-cta p {
+      color: var(--purple-light);
+      font-size: 0.95rem;
+      margin-bottom: 26px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       PÁGINAS DE CATEGORÍAS (TYHOT, TYICE, TYBOWLS)
+    ═══════════════════════════════════════════════════════════════ */
+    .cat-header {
+      padding: 44px 20px 24px;
+      text-align: center;
+    }
+    .cat-title {
+      font-size: clamp(2rem, 5vw, 2.6rem);
+      font-weight: 900;
+      color: var(--purple-dark);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .cat-subtitle {
+      font-size: 0.96rem;
+      color: var(--purple-mid);
+      max-width: 480px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+    .cat-products {
+      padding: 8px 20px 64px;
+    }
+    .products-grid {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    /* Fondos específicos de categoría */
+    .bg-hot { background: linear-gradient(180deg, var(--cream) 0%, #FFF3EC 100%); }
+    .bg-ice { background: linear-gradient(180deg, var(--cream) 0%, #EDF2FF 100%); }
+    .bg-bowls { background: linear-gradient(180deg, var(--cream) 0%, var(--lime-light) 100%); }
+    .bg-azuca { background: linear-gradient(180deg, var(--cream) 0%, #FFEBF2 100%); }
+
+    /* CTA en páginas de categorías */
+    .cta {
+      padding: 60px 20px;
+      background: var(--purple-dark);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta h2 {
+      font-size: clamp(1.6rem, 3.5vw, 2.1rem);
+      font-weight: 900;
+      color: var(--cream);
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 2;
+    }
+    .cta p {
+      color: var(--purple-light);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════════ */
+    .footer {
+      background: var(--purple-dark);
+      border-top: 1px solid rgba(212, 217, 140, 0.08);
+      color: var(--cream);
+      padding: 44px 20px 20px;
+    }
+    .footer-grid {
+      max-width: 1040px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 28px;
+      margin-bottom: 28px;
+    }
+    .footer a {
+      color: var(--purple-light);
+      text-decoration: none;
+      font-size: 0.84rem;
+      transition: color var(--transition-fast);
+    }
+    .footer a:hover { color: var(--lime); }
+    .footer-bottom {
+      border-top: 1px solid rgba(212, 217, 140, 0.1);
+      padding-top: 16px;
+      text-align: center;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MODAL DE CONFIRMACIÓN
+    ═══════════════════════════════════════════════════════════════ */
+    .custom-modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(74, 25, 66, 0.78);
+      backdrop-filter: blur(6px);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+    .custom-modal-overlay.open {
+      display: flex;
+      animation: fadeIn var(--transition-fast);
+    }
+    .custom-modal-box {
+      background: var(--white);
+      border-radius: var(--radius-xl);
+      max-width: 440px;
+      width: 100%;
+      padding: 32px 24px;
+      text-align: center;
+      position: relative;
+      box-shadow: var(--shadow-modal);
+      animation: scaleUp var(--transition-bounce);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ANIMACIONES
+    ═══════════════════════════════════════════════════════════════ */
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleUp {
+      from { opacity: 0; transform: scale(0.9); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes bounceIn {
+      0% { opacity: 0; transform: translateY(8px) scale(0.96); }
+      60% { transform: translateY(-3px) scale(1.02); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE DESIGN (Desktop > 768px, Tablet <= 768px, Mobile <= 600px, 390px, 360px)
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 992px) {
+      .customizer-layout {
+        grid-template-columns: 1fr;
+      }
+      .summary-panel {
+        position: static;
+        margin-top: 10px;
+      }
+      .discover-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 768px) {
+      /* Header en Mobile: Ocultar barra horizontal para dar espacio limpio al logo y ☰ */
+      .header-nav {
+        display: none !important;
+      }
+      .header-inner {
+        padding: 0 16px;
+      }
+      .header-logo-img {
+        height: 36px;
+        max-width: 115px;
+      }
+      .header-hamburger {
+        padding: 8px;
+      }
+      .header-hamburger span {
+        width: 24px;
+        height: 3px;
+      }
+
+      /* Hero Mobile */
+      .home-hero {
+        padding: 44px 16px 36px;
+        min-height: auto;
+      }
+      .home-hero h1 {
+        font-size: clamp(2.1rem, 8vw, 3rem);
+      }
+      .hero-btn-group {
+        flex-direction: column;
+        width: 100%;
+        gap: 12px;
+      }
+      .hero-btn-group button {
+        width: 100%;
+        min-height: 50px;
+        font-size: 0.92rem;
+      }
+
+      /* Secciones Mobile */
+      .home-about, .home-discover, .home-favs, .home-dna, .home-customizer {
+        padding: 42px 16px;
+      }
+
+      /* Descubre Tyango en 1 Columna en Mobile */
+      .discover-grid {
+        grid-template-columns: 1fr;
+        gap: 18px;
+        max-width: 440px;
+        margin: 28px auto 0;
+      }
+      .discover-card {
+        padding: 24px 20px;
+      }
+      .discover-card .dc-btn {
+        width: 100%;
+        justify-content: center;
+        padding: 12px 20px;
+        font-size: 0.85rem;
+      }
+
+      /* Catálogos & Favoritos: 1 Tarjeta por Fila */
+      .products-grid, .favs-grid {
+        grid-template-columns: 1fr;
+        max-width: 420px;
+        margin: 24px auto 0;
+        gap: 22px;
+      }
+      .card-img {
+        height: 210px;
+      }
+      .card-body {
+        padding: 18px 16px;
+      }
+      .card-name {
+        font-size: 1.18rem;
+      }
+      .card-desc {
+        font-size: 0.88rem;
+        min-height: auto;
+        margin-bottom: 14px;
+      }
+      .card-price {
+        font-size: 1.25rem;
+      }
+
+      /* Personalizador Mobile */
+      .customizer-layout {
+        grid-template-columns: 1fr;
+        gap: 24px;
+      }
+      .ingredient-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+      .ingredient-item {
+        padding: 14px 10px;
+        min-height: 84px;
+      }
+      .ingredient-emoji {
+        font-size: 2.3rem;
+      }
+      .size-grid {
+        grid-template-columns: 1fr;
+        gap: 10px;
+      }
+      .qty-stepper {
+        padding: 4px 8px;
+        gap: 12px;
+      }
+      .qty-btn {
+        width: 36px;
+        height: 36px;
+        font-size: 1.1rem;
+      }
+      .btn-create-tyango {
+        min-height: 52px;
+        font-size: 0.98rem;
+      }
+    }
+
+    @media (max-width: 414px) {
+      .header-inner {
+        padding: 0 14px;
+      }
+      .header-logo-img {
+        height: 34px;
+        max-width: 105px;
+      }
+      .card-img {
+        height: 195px;
+      }
+      .dna-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 375px) {
+      .header-inner {
+        padding: 0 12px;
+      }
+      .header-logo-img {
+        height: 30px;
+        max-width: 95px;
+      }
+      .card-img {
+        height: 180px;
+      }
+      .ingredient-item {
+        padding: 12px 6px;
+        min-height: 78px;
+      }
+      .ingredient-emoji {
+        font-size: 2rem;
+      }
+      .ingredient-name {
+        font-size: 0.8rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .header-inner {
+        padding: 0 10px;
+      }
+      .header-logo-img {
+        height: 28px;
+        max-width: 85px;
+      }
+      .card-img {
+        height: 170px;
+      }
+      .step-title {
+        font-size: 0.98rem;
+      }
+      .counter-pill {
+        font-size: 0.72rem;
+        padding: 3px 8px;
+      }
+      .dna-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════ HEADER — SIEMPRE HORIZONTAL ═══════
+       TYANGO | TYHOT | TYICE | TYBOWLS | ☰
+  ═══════════════════════════════════════════════ -->
+  <header class="header" id="header" role="banner">
+    <div class="header-inner">
+
+      <!-- TYANGO (LOGO OFICIAL) — izquierda -->
+      <button class="header-logo" onclick="navigate('home')" aria-label="Ir a la página principal de TYANGO">
+        <img src="logo.png" alt="TYANGO" class="header-logo-img">
+      </button>
+
+      <!-- TYHOT | TYICE | TYBOWLS | TYAZUCA — centro (SIEMPRE visibles horizontalmente) -->
+      <nav class="header-nav" role="navigation" aria-label="Navegación principal de productos">
+        <button class="header-nav-btn" data-page="hot" onclick="navigate('hot')" aria-label="Ver productos TYHOT">TYHOT</button>
+        <button class="header-nav-btn" data-page="ice" onclick="navigate('ice')" aria-label="Ver productos TYICE">TYICE</button>
+        <button class="header-nav-btn" data-page="bowls" onclick="navigate('bowls')" aria-label="Ver productos TYBOWLS">TYBOWLS</button>
+        <button class="header-nav-btn" data-page="azuca" onclick="navigate('azuca')" aria-label="Ver productos TYAZUCA">TYAZUCA</button>
+      </nav>
+
+      <!-- ☰ — derecha (abre drawer en móvil / dropdown en desktop) -->
+      <button class="header-hamburger" onclick="toggleMenu()" aria-label="Abrir menú" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+    </div>
+  </header>
+
+  <!-- Menú secundario (Desktop) -->
+  <aside class="secondary-menu" id="secondaryMenu" aria-label="Menú secundario">
+    <a href="#" onclick="navigate('home'); setTimeout(() => document.getElementById('personaliza-section').scrollIntoView({behavior:'smooth'}), 320); toggleMenu();">🎨 Hazlo a tu manera</a>
+    <a href="#">📸 Instagram</a>
+    <a href="#">📘 Facebook</a>
+    <a href="#">🎵 TikTok</a>
+    <a href="#">📍 Ubicación</a>
+    <a href="#">📞 Contacto</a>
+  </aside>
+
+  <!-- Backdrop Overlay para Drawer Móvil -->
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeMobileDrawer()"></div>
+
+  <!-- Menú Drawer Móvil -->
+  <aside class="mobile-drawer" id="mobileDrawer" role="dialog" aria-modal="true" aria-label="Menú principal móvil">
+    <div class="drawer-header">
+      <div class="drawer-logo">
+        <img src="logo.png" alt="TYANGO">
+      </div>
+      <button type="button" class="drawer-close-btn" onclick="closeMobileDrawer()" aria-label="Cerrar menú">
+        ✕
+      </button>
+    </div>
+
+    <div class="drawer-body">
+      <div class="drawer-section-title">LÍNEAS DEL MENÚ</div>
+      <nav class="drawer-nav">
+        <button type="button" class="drawer-nav-item active" data-page="home" onclick="navigate('home')">
+          <span class="dni-icon">🥭</span>
+          <span class="dni-text">TYANGO</span>
+          <span class="dni-tag">Inicio</span>
+        </button>
+        <button type="button" class="drawer-nav-item" data-page="hot" onclick="navigate('hot')">
+          <span class="dni-icon">🔥</span>
+          <span class="dni-text">TYHOT</span>
+          <span class="dni-tag">Caliente</span>
+        </button>
+        <button type="button" class="drawer-nav-item" data-page="ice" onclick="navigate('ice')">
+          <span class="dni-icon">❄️</span>
+          <span class="dni-text">TYICE</span>
+          <span class="dni-tag">Helado</span>
+        </button>
+        <button type="button" class="drawer-nav-item" data-page="bowls" onclick="navigate('bowls')">
+          <span class="dni-icon">🥣</span>
+          <span class="dni-text">TYBOWLS</span>
+          <span class="dni-tag">Bowls</span>
+        </button>
+        <button type="button" class="drawer-nav-item" data-page="azuca" onclick="navigate('azuca')">
+          <span class="dni-icon">🍓</span>
+          <span class="dni-text">TYAZUCA</span>
+          <span class="dni-tag">Fresas</span>
+        </button>
+      </nav>
+
+      <div class="drawer-divider"></div>
+
+      <div class="drawer-section-title">EXPERIENCIAS & CONTACTO</div>
+      <div class="drawer-sub-links">
+        <a href="#" class="drawer-sub-link" onclick="navigate('home'); setTimeout(() => document.getElementById('personaliza-section').scrollIntoView({behavior:'smooth'}), 320); closeMobileDrawer();">
+          🎨 Hazlo a tu manera
+        </a>
+        <a href="#" class="drawer-sub-link">📸 Instagram</a>
+        <a href="#" class="drawer-sub-link">📍 Ubicación</a>
+        <a href="#" class="drawer-sub-link">📞 Contacto</a>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ═══════ PAGE: HOME (TYANGO) ═══════ -->
+  <main class="page active visible" id="page-home">
+
+    <!-- SECCIÓN 1 — HERO -->
+    <section class="home-hero" aria-label="Bienvenida a TYANGO">
+      <div class="home-blob" style="width:340px;height:340px;background:var(--purple-dark);top:5%;left:-6%"></div>
+      <div class="home-blob" style="width:240px;height:240px;background:var(--lime);bottom:8%;right:-4%;animation-delay:3s"></div>
+      <div style="position:relative;z-index:2;max-width:620px">
+        <span class="section-badge">✨ Bienvenido</span>
+        <h1>BIENVENIDO A<br><em>TYANGO</em></h1>
+        <p class="hero-tagline">Sabores que no pasan desapercibidos. 🥭</p>
+        <p class="hero-desc">Una experiencia llena de sabor, creatividad y combinaciones hechas para disfrutar.</p>
+        <div class="hero-btn-group">
+          <button type="button" class="btn-primary" onclick="document.getElementById('discover-section').scrollIntoView({behavior:'smooth'})">EXPLORAR MENÚ</button>
+          <button type="button" class="btn-secondary" onclick="document.getElementById('personaliza-section').scrollIntoView({behavior:'smooth'})">🎨 HAZLO A TU MANERA</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 2 — ¿QUÉ ES TYANGO? -->
+    <section class="home-about" aria-label="Acerca de TYANGO">
+      <h2 class="section-title">¿QUÉ ES TYANGO?</h2>
+      <p>TYANGO nació para transformar la manera de disfrutar sabores que ya conocemos y convertirlos en experiencias que quieras repetir.</p>
+      <p>Creamos combinaciones, bebidas y productos llenos de personalidad, siempre buscando ese equilibrio entre sabor, creatividad y diversión.</p>
+    </section>
+
+    <!-- SECCIÓN 3 — DESCUBRE TYANGO -->
+    <section class="home-discover" id="discover-section" aria-label="Descubre las cuatro líneas de TYANGO">
+      <span class="section-badge">Nuestras Líneas</span>
+      <h2 class="section-title">DESCUBRE TYANGO</h2>
+      <p class="section-subtitle">Cuatro formas de disfrutar nuestra esencia.</p>
+      <div class="discover-grid">
+        <div class="discover-card" onclick="navigate('hot')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')navigate('hot')" aria-label="Explorar categoría TYHOT">
+          <span class="dc-emoji">🔥</span>
+          <h3 class="dc-name">TYHOT</h3>
+          <p class="dc-desc">Fruta fresca con aderezos de Nochixtlán, Oaxaca. Un toque de picante y mucho sabor. 🌶️</p>
+          <button type="button" class="dc-btn" onclick="event.stopPropagation(); navigate('hot')">VER TYHOT →</button>
+        </div>
+        <div class="discover-card" onclick="navigate('ice')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')navigate('ice')" aria-label="Explorar categoría TYICE">
+          <span class="dc-emoji">❄️</span>
+          <h3 class="dc-name">TYICE</h3>
+          <p class="dc-desc">Bebidas frías, frescas y llenas de sabor.</p>
+          <button type="button" class="dc-btn" onclick="event.stopPropagation(); navigate('ice')">VER TYICE →</button>
+        </div>
+        <div class="discover-card" onclick="navigate('bowls')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')navigate('bowls')" aria-label="Explorar categoría TYBOWLS">
+          <span class="dc-emoji">🥣</span>
+          <h3 class="dc-name">TYBOWLS</h3>
+          <p class="dc-desc">Bowls nutritivos y deliciosos para disfrutar.</p>
+          <button type="button" class="dc-btn" onclick="event.stopPropagation(); navigate('bowls')">VER TYBOWLS →</button>
+        </div>
+        <div class="discover-card" onclick="navigate('azuca')" role="button" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')navigate('azuca')" aria-label="Explorar categoría TYAZUCA">
+          <span class="dc-emoji">🍓</span>
+          <h3 class="dc-name">TYAZUCA</h3>
+          <p class="dc-desc">Fresas frescas con aderezos únicos a tu manera.</p>
+          <button type="button" class="dc-btn" onclick="event.stopPropagation(); navigate('azuca')">VER TYAZUCA →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 4 — FAVORITOS DE TYANGO -->
+    <section class="home-favs" aria-label="Favoritos de TYANGO">
+      <span class="section-badge">Recomendados</span>
+      <h2 class="section-title">LOS FAVORITOS DE TYANGO</h2>
+      <p class="section-subtitle">Si no sabes por dónde empezar, empieza por aquí.</p>
+      <div class="favs-grid" id="grid-favs"></div>
+    </section>
+
+    <!-- SECCIÓN 5 — PERSONALIZA TU TYANGO -->
+    <section class="home-customizer" id="personaliza-section" aria-label="Personalizador de TYANGO">
+      <div style="text-align:center; max-width:620px; margin:0 auto 32px">
+        <span class="section-badge">🎨 Tu Creación</span>
+        <h2 class="section-title">PERSONALIZA TU TYANGO</h2>
+        <p class="section-subtitle">Hazlo a tu manera. Elige tus favoritos y crea una combinación única.</p>
+      </div>
+
+      <div class="customizer-layout">
+        <!-- Columna Izquierda: Pasos de Personalización -->
+        <div class="customizer-steps">
+
+          <!-- PASO 1 — ELIGE TU FRUTA -->
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-title-box">
+                <span class="step-num">1</span>
+                <h3 class="step-title">Elige tu Fruta</h3>
+              </div>
+              <span id="fruit-counter" class="counter-pill">0 / 3 frutas</span>
+            </div>
+
+            <!-- Selector de Modo -->
+            <div class="mode-toggle" role="tablist" aria-label="Modo de frutas">
+              <button type="button" class="mode-btn" id="mode-individual" onclick="setFruitMode('individual')" role="tab" aria-selected="false">
+                🥭 Individual (1 fruta)
+              </button>
+              <button type="button" class="mode-btn active" id="mode-mix" onclick="setFruitMode('mix')" role="tab" aria-selected="true">
+                🍍 Mix (hasta 3 frutas)
+              </button>
+            </div>
+
+            <!-- Grid de Frutas -->
+            <div class="ingredient-grid" id="fruit-grid" role="group" aria-label="Frutas disponibles">
+              <!-- Renderizado dinámico -->
+            </div>
+
+            <div id="fruit-limit-msg" class="limit-notice" role="alert">
+              <span>⚠️ Límite de frutas alcanzado. Quita una para cambiarla.</span>
+            </div>
+          </div>
+
+          <!-- PASO 2 — AÑADE TOPPINGS -->
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-title-box">
+                <span class="step-num">2</span>
+                <h3 class="step-title">Añade Toppings</h3>
+              </div>
+              <span id="topping-counter" class="counter-pill">0 / 3 toppings</span>
+            </div>
+
+            <!-- Grid de Toppings -->
+            <div class="ingredient-grid" id="topping-grid" role="group" aria-label="Toppings disponibles">
+              <!-- Renderizado dinámico -->
+            </div>
+
+            <div id="topping-limit-msg" class="limit-notice" role="alert">
+              <span>⚠️ Ya tienes tus 3 toppings. Quita uno para cambiarlo.</span>
+            </div>
+          </div>
+
+          <!-- PASO 3 — ELIGE EL TAMAÑO -->
+          <div class="step-card">
+            <div class="step-header">
+              <div class="step-title-box">
+                <span class="step-num">3</span>
+                <h3 class="step-title">Elige el Tamaño</h3>
+              </div>
+            </div>
+
+            <!-- Grid de Tamaños -->
+            <div class="size-grid" id="size-grid" role="radiogroup" aria-label="Tamaños disponibles">
+              <!-- Renderizado dinámico -->
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Columna Derecha: Resumen en Tiempo Real -->
+        <aside class="summary-panel" aria-label="Resumen de tu pedido personalizado">
+          <h3 class="summary-title">TU TYANGO ✨</h3>
+
+          <div class="summary-items">
+            <!-- Fila Fruta -->
+            <div class="summary-row">
+              <span class="summary-label">Fruta seleccionada</span>
+              <div class="summary-value" id="summary-fruits">
+                <span class="summary-empty">Elige al menos 1 fruta</span>
+              </div>
+            </div>
+
+            <!-- Fila Toppings -->
+            <div class="summary-row">
+              <span class="summary-label">Toppings</span>
+              <div class="summary-value" id="summary-toppings">
+                <span class="summary-empty">Sin toppings</span>
+              </div>
+            </div>
+
+            <!-- Fila Tamaño -->
+            <div class="summary-row">
+              <span class="summary-label">Tamaño</span>
+              <div class="summary-value" id="summary-size">
+                <span class="summary-tag">Grande ⭐</span>
+              </div>
+            </div>
+
+            <!-- Fila Cantidad -->
+            <div class="summary-row">
+              <span class="summary-label">Cantidad</span>
+              <div class="qty-stepper">
+                <button type="button" class="qty-btn" onclick="changeQuantity(-1)" aria-label="Reducir cantidad">−</button>
+                <span class="qty-num" id="qty-display" aria-live="polite">1</span>
+                <button type="button" class="qty-btn" onclick="changeQuantity(1)" aria-label="Aumentar cantidad">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Easter Egg: Mensaje divertido -->
+          <div id="witty-reaction" class="witty-banner" role="status">
+            <span id="witty-text">👀 TYANGO no juzga... pero nosotros tampoco lo hemos probado.</span>
+          </div>
+
+          <!-- Subtotal -->
+          <div class="summary-total-box">
+            <span class="total-label">Subtotal</span>
+            <span class="total-amount" id="summary-total">$12.500</span>
+          </div>
+
+          <!-- Aviso Legal & Checkbox -->
+          <div class="disclaimer-card">
+            <div class="disclaimer-title">⚠️ TÚ LO CREAS, TÚ LO DISFRUTAS.</div>
+            <p class="disclaimer-text">
+              Algunas combinaciones pueden ser... arriesgadas 👀 TYANGO permite personalizar tu producto, pero no garantiza que todas las combinaciones tengan el mismo resultado de sabor. Al confirmar, aceptas la preparación exacta con los ingredientes seleccionados.
+            </p>
+            <label class="disclaimer-check">
+              <input type="checkbox" id="accept-disclaimer" onchange="toggleDisclaimerAccept()">
+              <span>Entiendo y acepto mi combinación.</span>
+            </label>
+          </div>
+
+          <!-- Botón de Confirmación -->
+          <button type="button" id="btn-create-tyango" class="btn-create-tyango" disabled onclick="submitCustomTyango()">
+            CREAR MI TYANGO →
+          </button>
+        </aside>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 6 — EL ADN DE TYANGO -->
+    <section class="home-dna" aria-label="Valores y ADN de TYANGO">
+      <span class="section-badge">Nuestra Esencia</span>
+      <h2 class="section-title">EL ADN DE TYANGO</h2>
+      <div class="dna-grid">
+        <div class="dna-item">
+          <span class="dna-emoji">🥭</span>
+          <div class="dna-title">Sabor</div>
+          <div class="dna-desc">Combinaciones que no pasan desapercibidas.</div>
+        </div>
+        <div class="dna-item">
+          <span class="dna-emoji">✨</span>
+          <div class="dna-title">Creatividad</div>
+          <div class="dna-desc">Siempre buscamos una nueva forma de disfrutar.</div>
+        </div>
+        <div class="dna-item">
+          <span class="dna-emoji">❤️</span>
+          <div class="dna-title">Hecho con amor</div>
+          <div class="dna-desc">Cada producto lleva nuestra esencia.</div>
+        </div>
+        <div class="dna-item">
+          <span class="dna-emoji">🌱</span>
+          <div class="dna-title">Fresco</div>
+          <div class="dna-desc">Ingredientes pensados para disfrutar.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECCIÓN 7 — LLAMADO FINAL -->
+    <section class="home-final-cta" aria-label="Llamado a la acción">
+      <div class="cta-circle" style="width:260px;height:260px;top:-80px;right:-80px"></div>
+      <div class="cta-circle" style="width:160px;height:160px;bottom:-50px;left:-50px"></div>
+      <h2>¿LISTO PARA PROBAR TYANGO?</h2>
+      <p>Descubre tu nuevo favorito.</p>
+      <button type="button" class="btn-secondary" onclick="document.getElementById('discover-section').scrollIntoView({behavior:'smooth'})">EXPLORAR MENÚ →</button>
+    </section>
+
+    <!-- FOOTER HOME -->
+    <footer class="footer" id="footer-home" role="contentinfo"></footer>
+  </main>
+
+  <!-- ═══════ PAGE: TYHOT ═══════ -->
+  <main class="page" id="page-hot" role="main">
+    <div class="cat-header bg-hot">
+      <span class="section-badge" style="background:rgba(232,93,48,0.15);color:#D94E20">🔥 Línea Caliente</span>
+      <h1 class="cat-title">TYHOT</h1>
+      <p class="cat-subtitle">Fruta fresca con aderezos de Nochixtlán, Oaxaca. Un toque de picante y mucho sabor. 🌶️</p>
+    </div>
+    <div class="cat-products bg-hot">
+      <div class="products-grid" id="grid-hot"></div>
+    </div>
+    <div class="cta">
+      <div class="cta-circle" style="width:220px;height:220px;top:-60px;right:-60px"></div>
+      <h2>¿Listo para probar algo increíble?</h2>
+      <p>Haz tu pedido y vive la experiencia Tyango.</p>
+      <a href="#" class="btn-secondary">Pedir Ahora 🚀</a>
+    </div>
+    <footer class="footer" id="footer-hot" role="contentinfo"></footer>
+  </main>
+
+  <!-- ═══════ PAGE: TYICE ═══════ -->
+  <main class="page" id="page-ice" role="main">
+    <div class="cat-header bg-ice">
+      <span class="section-badge" style="background:rgba(59,130,246,0.15);color:#2563EB">❄️ Línea Helada</span>
+      <h1 class="cat-title">TYICE</h1>
+      <p class="cat-subtitle">Refréscate con nuestras creaciones frías. Perfectas para cualquier momento del día.</p>
+    </div>
+    <div class="cat-products bg-ice">
+      <div class="products-grid" id="grid-ice"></div>
+    </div>
+    <div class="cta">
+      <div class="cta-circle" style="width:220px;height:220px;top:-60px;right:-60px"></div>
+      <h2>¿Listo para probar algo increíble?</h2>
+      <p>Haz tu pedido y vive la experiencia Tyango.</p>
+      <a href="#" class="btn-secondary">Pedir Ahora 🚀</a>
+    </div>
+    <footer class="footer" id="footer-ice" role="contentinfo"></footer>
+  </main>
+
+  <!-- ═══════ PAGE: TYBOWLS ═══════ -->
+  <main class="page" id="page-bowls" role="main">
+    <div class="cat-header bg-bowls">
+      <span class="section-badge" style="background:rgba(212,217,140,0.4);color:var(--purple-dark)">🥣 Línea Bowls</span>
+      <h1 class="cat-title">TYBOWLS</h1>
+      <p class="cat-subtitle">Bowls nutritivos y deliciosos. El complemento perfecto para tu bebida favorita.</p>
+    </div>
+    <div class="cat-products bg-bowls">
+      <div class="products-grid" id="grid-bowls"></div>
+    </div>
+    <div class="cta">
+      <div class="cta-circle" style="width:220px;height:220px;top:-60px;right:-60px"></div>
+      <h2>¿Listo para probar algo increíble?</h2>
+      <p>Haz tu pedido y vive la experiencia Tyango.</p>
+      <a href="#" class="btn-secondary">Pedir Ahora 🚀</a>
+    </div>
+    <footer class="footer" id="footer-bowls" role="contentinfo"></footer>
+  </main>
+
+  <!-- ═══════ PAGE: TYAZUCA ═══════ -->
+  <main class="page" id="page-azuca" role="main">
+    <div class="cat-header bg-azuca">
+      <span class="section-badge" style="background:rgba(236,72,153,0.15);color:#DB2777">🍓 Fresas con Aderezos</span>
+      <h1 class="cat-title">TYAZUCA</h1>
+      <p class="cat-subtitle" style="font-weight: 800; color: var(--purple-dark); margin-bottom: 4px;">Fresas que puedes llevar a tu manera. 🍓</p>
+      <p class="cat-subtitle">Fresas frescas acompañadas de aderezos y combinaciones llenas de sabor.</p>
+    </div>
+    <div class="cat-products bg-azuca">
+      <div class="products-grid" id="grid-azuca"></div>
+    </div>
+    <div class="cta">
+      <div class="cta-circle" style="width:220px;height:220px;top:-60px;right:-60px"></div>
+      <h2>¿Quieres personalizarlas a tu gusto?</h2>
+      <p>Elige tus aderezos y crea tu combinación única.</p>
+      <a href="#" class="btn-secondary" onclick="event.preventDefault(); navigate('home'); setTimeout(() => document.getElementById('personaliza-section').scrollIntoView({behavior:'smooth'}), 300);">🎨 HAZLO A TU MANERA</a>
+    </div>
+    <footer class="footer" id="footer-azuca" role="contentinfo"></footer>
+  </main>
+
+  <!-- ═══════ MODAL SUCCESS ═══════ -->
+  <div class="custom-modal-overlay" id="successModal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="custom-modal-box">
+      <div style="font-size: 3.2rem; margin-bottom: 10px;">🎉🥭</div>
+      <h3 id="modal-title" style="font-size: 1.5rem; font-weight: 900; color: var(--purple-dark); margin-bottom: 6px;">¡TU TYANGO ESTÁ LISTO!</h3>
+      <p style="font-size: 0.9rem; color: var(--purple-mid); margin-bottom: 16px; line-height: 1.45;">
+        ¡Tu combinación personalizada ha sido creada con éxito!
+      </p>
+      <div id="modal-order-details" style="background: var(--cream); border-radius: var(--radius-md); padding: 14px; text-align: left; font-size: 0.84rem; color: var(--purple-dark); margin-bottom: 20px; border: 1px solid rgba(74,25,66,0.08); line-height: 1.55;">
+      </div>
+      <div style="display: flex; gap: 10px;">
+        <button type="button" class="btn-primary" style="flex: 1; padding: 11px 16px; font-size: 0.8rem;" onclick="closeSuccessModal()">Crear Otro</button>
+        <button type="button" class="btn-secondary" style="flex: 1; padding: 11px 16px; font-size: 0.8rem;" onclick="closeSuccessModal(); navigate('hot');">Ver Menú</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════ JAVASCRIPT ENGINE ═══════ -->
+  <script>
+    /* ═══════ CATÁLOGOS EXISTENTES ═══════ */
+    const catalog = {
+      hot: [
+        { 
+          img: 'tyango-clasico.jpg', 
+          badge: 'Popular', 
+          badgeCss: 'background:rgba(255,100,50,0.12);color:#E85D30', 
+          name: 'TYANGO CLÁSICO', 
+          desc: 'Mango jugoso con chamoy, limón y Tajín. Clásico, fresco y lleno de sabor.', 
+          price: '$2.50' 
+        },
+        { 
+          img: 'picazana.jpg', 
+          badge: 'Nuevo', 
+          badgeCss: 'background:rgba(236,72,153,0.12);color:#DB2777', 
+          name: 'PICAZANA', 
+          desc: 'Manzana fresca envuelta en una intensa masa de chamoy y tamarindo. Dulce, ácida y picosita. 🌶️', 
+          price: 'Por definir' 
+        },
+        { 
+          img: 'uva-pulpa.jpg', 
+          badge: 'Nuevo', 
+          badgeCss: 'background:rgba(123,91,123,0.12);color:#7B5B7B', 
+          name: 'UVA PULPA', 
+          desc: 'Uva verde cubierta con chamoy. Dulce, ácida y con el toque picosito perfecto. 🌶️', 
+          price: 'Por definir' 
+        },
+        { emoji:'🍫', bg:'linear-gradient(135deg,#FFF3E0,#FFE8CC)', name:'Chocolate Caliente', desc:'Chocolate oscuro derretido con marshmallows artesanales.', price:'$9.500' },
+      ],
+      ice: [
+        { emoji:'🧊', bg:'linear-gradient(135deg,#E0F2FE,#BAE6FD)', badge:'Best Seller', badgeCss:'background:rgba(59,130,246,0.12);color:#2563EB', name:'Iced Latte Tyango', desc:'Espresso frío con leche y hielo, toque especial.', price:'$9.500' },
+        { emoji:'🍹', bg:'linear-gradient(135deg,#ECFDF5,#D1FAE5)', name:'Limonada Fresca', desc:'Limón natural, hierbabuena y jengibre.', price:'$7.500' },
+        { emoji:'🥭', bg:'linear-gradient(135deg,#FFF7ED,#FFEDD5)', badge:'Tropical', badgeCss:'background:rgba(245,158,11,0.12);color:#D97706', name:'Smoothie Tropical', desc:'Mango, maracuyá y piña natural.', price:'$11.000' },
+        { emoji:'🫐', bg:'linear-gradient(135deg,#F5F3FF,#EDE9FE)', name:'Berry Blast', desc:'Frutos rojos, yogur natural y miel pura.', price:'$10.500' },
+      ],
+      bowls: [
+        { emoji:'🥑', bg:'linear-gradient(135deg,#E8EDB8,#D4D98C)', badge:'Favorito', badgeCss:'background:rgba(212,217,140,0.35);color:#4A1942', name:'Açaí Power Bowl', desc:'Açaí, granola, banana, frutos rojos y miel.', price:'$15.000' },
+        { emoji:'🥝', bg:'linear-gradient(135deg,#FEF3C7,#FDE68A)', name:'Green Vitality', desc:'Espinaca, kiwi, banana, chía y leche de coco.', price:'$14.000' },
+        { emoji:'🍓', bg:'linear-gradient(135deg,#FCE7F3,#FBCFE8)', badge:'Nuevo', badgeCss:'background:rgba(236,72,153,0.12);color:#DB2777', name:'Pitaya Dream', desc:'Pitaya rosa, coco, mango y granola crujiente.', price:'$16.000' },
+        { emoji:'🍌', bg:'linear-gradient(135deg,#FEF9C3,#FEF08A)', name:'Tropical Sunrise', desc:'Mango, piña, banana, coco y hemp protein.', price:'$14.500' },
+      ],
+      azuca: [
+        { emoji:'🍓', bg:'linear-gradient(135deg,#FFE4E6,#FECDD3)', badge:'Nuevo', badgeCss:'background:rgba(236,72,153,0.15);color:#DB2777', name:'Fresas Tradicionales', desc:'Fresas seleccionadas con crema batida artesanal y leche condensada.', price:'$12.000' },
+        { emoji:'🍫', bg:'linear-gradient(135deg,#FFF1F2,#FFE4E6)', badge:'Popular', badgeCss:'background:rgba(255,100,50,0.12);color:#E85D30', name:'Fresas Choco-Lover', desc:'Fresas frescas bañadas en chocolate oscuro, nutella y chips crocantes.', price:'$14.000' },
+        { emoji:'🍬', bg:'linear-gradient(135deg,#FDF2F8,#FCE7F3)', name:'Fresas Dulce Explosión', desc:'Fresas frescas con masmelos, gomitas dulces y lluvia de toppings.', price:'$13.500' },
+        { emoji:'🍯', bg:'linear-gradient(135deg,#FFFBEB,#FEF3C7)', name:'Fresas Miel & Granola', desc:'Fresas crujientes con miel de abeja pura, granola y yogur griego.', price:'$13.000' },
+      ]
+    };
+
+    /* Favoritos destacados para la home */
+    const favorites = [
+      { ...catalog.hot[0], badge:'Favorito', badgeCss:'background:rgba(212,217,140,0.35);color:#4A1942' },
+      { ...catalog.ice[0], badge:'Best Seller', badgeCss:'background:rgba(59,130,246,0.12);color:#2563EB' },
+      { ...catalog.bowls[0], badge:'Favorito', badgeCss:'background:rgba(212,217,140,0.35);color:#4A1942' },
+    ];
+
+    /* ═══════ DATOS DEL PERSONALIZADOR ═══════ */
+    const customizerData = {
+      fruits: [
+        { id: 'mango', name: 'Mango', emoji: '🥭' },
+        { id: 'pina', name: 'Piña', emoji: '🍍' },
+        { id: 'fresa', name: 'Fresa', emoji: '🍓' },
+        { id: 'sandia', name: 'Sandía', emoji: '🍉' },
+        { id: 'pepino', name: 'Pepino', emoji: '🥒' },
+        { id: 'melon', name: 'Melón', emoji: '🍈' },
+        { id: 'manzana', name: 'Manzana', emoji: '🍎' },
+        { id: 'uva', name: 'Uva Congelada', emoji: '🍇' },
+      ],
+      toppings: [
+        { id: 'tajin', name: 'Tajín', emoji: '🌶️' },
+        { id: 'tajin_picante', name: 'Tajín Picante', emoji: '🔥' },
+        { id: 'limon', name: 'Limón', emoji: '🍋' },
+        { id: 'miel', name: 'Miel', emoji: '🍯' },
+        { id: 'gomitas', name: 'Gomitas', emoji: '🍬' },
+        { id: 'takis', name: 'Takis', emoji: '🌮' },
+      ],
+      sizes: [
+        { id: 'mini', name: 'Mini', badge: '', price: 9000 },
+        { id: 'grande', name: 'Grande ⭐', badge: 'Popular', price: 12500 },
+        { id: 'premium', name: 'Premium', badge: 'Full', price: 15500 },
+      ]
+    };
+
+    /* Estado reactivo */
+    const customState = {
+      fruitMode: 'mix',
+      selectedFruits: [],
+      selectedToppings: [],
+      selectedSize: 'grande',
+      quantity: 1,
+      disclaimerAccepted: false
+    };
+
+    function formatCOP(val) {
+      return '$' + val.toLocaleString('es-CO');
+    }
+
+    /* ═══════ RENDER DEL PERSONALIZADOR ═══════ */
+    function renderCustomizer() {
+      // 1. Frutas
+      const fruitGrid = document.getElementById('fruit-grid');
+      if (fruitGrid) {
+        fruitGrid.innerHTML = customizerData.fruits.map(f => `
+          <div class="ingredient-item" id="fruit-item-${f.id}" onclick="toggleFruit('${f.id}')" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleFruit('${f.id}')">
+            <span class="ingredient-emoji">${f.emoji}</span>
+            <span class="ingredient-name">${f.name}</span>
+          </div>
+        `).join('');
+      }
+
+      // 2. Toppings
+      const toppingGrid = document.getElementById('topping-grid');
+      if (toppingGrid) {
+        toppingGrid.innerHTML = customizerData.toppings.map(t => `
+          <div class="ingredient-item" id="topping-item-${t.id}" onclick="toggleTopping('${t.id}')" role="checkbox" aria-checked="false" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')toggleTopping('${t.id}')">
+            <span class="ingredient-emoji">${t.emoji}</span>
+            <span class="ingredient-name">${t.name}</span>
+          </div>
+        `).join('');
+      }
+
+      // 3. Tamaños
+      const sizeGrid = document.getElementById('size-grid');
+      if (sizeGrid) {
+        sizeGrid.innerHTML = customizerData.sizes.map(s => `
+          <div class="size-card ${s.id === customState.selectedSize ? 'selected' : ''}" id="size-card-${s.id}" onclick="selectSize('${s.id}')" role="radio" aria-checked="${s.id === customState.selectedSize}" tabindex="0" onkeydown="if(event.key==='Enter'||event.key===' ')selectSize('${s.id}')">
+            ${s.badge ? `<span class="size-badge">${s.badge}</span>` : ''}
+            <div class="size-name">${s.name}</div>
+            <div class="size-price">${formatCOP(s.price)}</div>
+          </div>
+        `).join('');
+      }
+
+      updateCustomizerUI();
+    }
+
+    /* ═══════ CONTROL DE MODO DE FRUTAS ═══════ */
+    function setFruitMode(mode) {
+      if (customState.fruitMode === mode) return;
+      customState.fruitMode = mode;
+
+      const btnInd = document.getElementById('mode-individual');
+      const btnMix = document.getElementById('mode-mix');
+      if (btnInd && btnMix) {
+        btnInd.classList.toggle('active', mode === 'individual');
+        btnInd.setAttribute('aria-selected', mode === 'individual');
+        btnMix.classList.toggle('active', mode === 'mix');
+        btnMix.setAttribute('aria-selected', mode === 'mix');
+      }
+
+      // Si pasa a individual y tenía más de 1 fruta, conservar solo la primera
+      if (mode === 'individual' && customState.selectedFruits.length > 1) {
+        customState.selectedFruits = [customState.selectedFruits[0]];
+      }
+
+      updateCustomizerUI();
+    }
+
+    /* ═══════ SELECCIÓN DE FRUTAS (con límites estrictos) ═══════ */
+    function toggleFruit(fruitId) {
+      const maxFruits = customState.fruitMode === 'individual' ? 1 : 3;
+      const index = customState.selectedFruits.indexOf(fruitId);
+
+      if (index > -1) {
+        customState.selectedFruits.splice(index, 1);
+      } else {
+        if (customState.fruitMode === 'individual') {
+          customState.selectedFruits = [fruitId];
+        } else {
+          if (customState.selectedFruits.length >= maxFruits) {
+            showTemporaryNotice('fruit-limit-msg');
+            return;
+          }
+          customState.selectedFruits.push(fruitId);
+        }
+      }
+
+      updateCustomizerUI();
+    }
+
+    /* ═══════ SELECCIÓN DE TOPPINGS (máx 3) ═══════ */
+    function toggleTopping(toppingId) {
+      const maxToppings = 3;
+      const index = customState.selectedToppings.indexOf(toppingId);
+
+      if (index > -1) {
+        customState.selectedToppings.splice(index, 1);
+      } else {
+        if (customState.selectedToppings.length >= maxToppings) {
+          showTemporaryNotice('topping-limit-msg');
+          return;
+        }
+        customState.selectedToppings.push(toppingId);
+      }
+
+      updateCustomizerUI();
+    }
+
+    function showTemporaryNotice(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.classList.add('show');
+        setTimeout(() => el.classList.remove('show'), 3200);
+      }
+    }
+
+    /* ═══════ SELECCIÓN DE TAMAÑO & CANTIDAD ═══════ */
+    function selectSize(sizeId) {
+      customState.selectedSize = sizeId;
+      document.querySelectorAll('.size-card').forEach(c => {
+        c.classList.remove('selected');
+        c.setAttribute('aria-checked', 'false');
+      });
+      const activeCard = document.getElementById(`size-card-${sizeId}`);
+      if (activeCard) {
+        activeCard.classList.add('selected');
+        activeCard.setAttribute('aria-checked', 'true');
+      }
+      updateCustomizerUI();
+    }
+
+    function changeQuantity(delta) {
+      customState.quantity = Math.max(1, customState.quantity + delta);
+      const qtyEl = document.getElementById('qty-display');
+      if (qtyEl) qtyEl.textContent = customState.quantity;
+      updateCustomizerUI();
+    }
+
+    function toggleDisclaimerAccept() {
+      const checkbox = document.getElementById('accept-disclaimer');
+      customState.disclaimerAccepted = checkbox ? checkbox.checked : false;
+      updateCustomizerUI();
+    }
+
+    /* ═══════ REACCIONES DIVERTIDAS (EASTER EGGS) ═══════ */
+    function checkWittyReactions() {
+      const fruits = customState.selectedFruits;
+      const toppings = customState.selectedToppings;
+      const banner = document.getElementById('witty-reaction');
+      const textEl = document.getElementById('witty-text');
+
+      if (!banner || !textEl) return;
+
+      let msg = '';
+
+      if (fruits.includes('pepino') && toppings.includes('gomitas')) {
+        msg = '👀 "TYANGO no juzga... pero nosotros tampoco lo hemos probado."';
+      } else if (toppings.includes('takis') && fruits.includes('melon')) {
+        msg = '🧐 "¿Seguro de esa combinación? Melón con Takis es para valientes."';
+      } else if (toppings.includes('takis') && toppings.includes('tajin_picante') && toppings.includes('gomitas')) {
+        msg = '🥊 "Bajo tu propio riesgo, campeón. 😂"';
+      } else if (toppings.includes('takis') && toppings.includes('tajin_picante')) {
+        msg = '🔥 "¡Nivel volcánico y crujiente activado! 🌶️"';
+      } else if (toppings.includes('gomitas') && toppings.includes('miel')) {
+        msg = '🍬 "¡Sobredosis de dulzura extrema! Nivel experto ✨"';
+      } else if (fruits.includes('sandia') && toppings.includes('tajin') && toppings.includes('limon')) {
+        msg = '🍉 "¡La gloria absoluta de los clásicos! 🏆"';
+      } else if (fruits.includes('mango') && toppings.includes('tajin') && toppings.includes('limon')) {
+        msg = '🥭 "¡El favorito de la casa! Simplemente perfecto."';
+      } else if (fruits.length === 3 && toppings.length === 3) {
+        msg = '⚡ "¡Super combo personalizado cargado con todo el poder Tyango!"';
+      }
+
+      if (msg) {
+        textEl.textContent = msg;
+        banner.classList.add('show');
+      } else {
+        banner.classList.remove('show');
+      }
+    }
+
+    /* ═══════ ACTUALIZACIÓN GENERAL DE UI ═══════ */
+    function updateCustomizerUI() {
+      const maxFruits = customState.fruitMode === 'individual' ? 1 : 3;
+      const fruitCount = customState.selectedFruits.length;
+      const toppingCount = customState.selectedToppings.length;
+
+      // 1. Contador de frutas
+      const fruitCounter = document.getElementById('fruit-counter');
+      if (fruitCounter) {
+        fruitCounter.textContent = `${fruitCount} / ${maxFruits} fruta${maxFruits > 1 ? 's' : ''}`;
+        fruitCounter.classList.toggle('limit-reached', fruitCount === maxFruits && fruitCount > 0);
+      }
+
+      // Estado visual de frutas
+      customizerData.fruits.forEach(f => {
+        const item = document.getElementById(`fruit-item-${f.id}`);
+        if (item) {
+          const isSelected = customState.selectedFruits.includes(f.id);
+          const isFull = fruitCount >= maxFruits;
+          item.classList.toggle('selected', isSelected);
+          item.classList.toggle('disabled', !isSelected && isFull);
+          item.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+        }
+      });
+
+      // 2. Contador de toppings
+      const toppingCounter = document.getElementById('topping-counter');
+      if (toppingCounter) {
+        toppingCounter.textContent = `${toppingCount} / 3 toppings`;
+        toppingCounter.classList.toggle('limit-reached', toppingCount === 3);
+      }
+
+      // Estado visual de toppings
+      customizerData.toppings.forEach(t => {
+        const item = document.getElementById(`topping-item-${t.id}`);
+        if (item) {
+          const isSelected = customState.selectedToppings.includes(t.id);
+          const isFull = toppingCount >= 3;
+          item.classList.toggle('selected', isSelected);
+          item.classList.toggle('disabled', !isSelected && isFull);
+          item.setAttribute('aria-checked', isSelected ? 'true' : 'false');
+        }
+      });
+
+      // 3. Resumen en tiempo real
+      const summaryFruits = document.getElementById('summary-fruits');
+      if (summaryFruits) {
+        if (fruitCount === 0) {
+          summaryFruits.innerHTML = '<span class="summary-empty">Elige al menos 1 fruta</span>';
+        } else {
+          summaryFruits.innerHTML = customState.selectedFruits.map(fId => {
+            const f = customizerData.fruits.find(x => x.id === fId);
+            return `<span class="summary-tag">${f.emoji} ${f.name}</span>`;
+          }).join('');
+        }
+      }
+
+      const summaryToppings = document.getElementById('summary-toppings');
+      if (summaryToppings) {
+        if (toppingCount === 0) {
+          summaryToppings.innerHTML = '<span class="summary-empty">Sin toppings</span>';
+        } else {
+          summaryToppings.innerHTML = customState.selectedToppings.map(tId => {
+            const t = customizerData.toppings.find(x => x.id === tId);
+            return `<span class="summary-tag">${t.emoji} ${t.name}</span>`;
+          }).join('');
+        }
+      }
+
+      const currentSize = customizerData.sizes.find(s => s.id === customState.selectedSize) || customizerData.sizes[1];
+      const summarySize = document.getElementById('summary-size');
+      if (summarySize) {
+        summarySize.innerHTML = `<span class="summary-tag">${currentSize.name}</span>`;
+      }
+
+      const subtotal = currentSize.price * customState.quantity;
+      const summaryTotal = document.getElementById('summary-total');
+      if (summaryTotal) {
+        summaryTotal.textContent = formatCOP(subtotal);
+      }
+
+      checkWittyReactions();
+
+      // 4. Habilitación del Botón
+      const btnCreate = document.getElementById('btn-create-tyango');
+      if (btnCreate) {
+        const canSubmit = fruitCount > 0 && customState.disclaimerAccepted;
+        btnCreate.disabled = !canSubmit;
+      }
+    }
+
+    /* ═══════ SUBMIT & MODAL ═══════ */
+    function submitCustomTyango() {
+      if (customState.selectedFruits.length === 0 || !customState.disclaimerAccepted) return;
+
+      const fruitNames = customState.selectedFruits.map(fId => {
+        const f = customizerData.fruits.find(x => x.id === fId);
+        return `${f.emoji} ${f.name}`;
+      }).join(' + ');
+
+      const toppingNames = customState.selectedToppings.length > 0 
+        ? customState.selectedToppings.map(tId => {
+            const t = customizerData.toppings.find(x => x.id === tId);
+            return `${t.emoji} ${t.name}`;
+          }).join(', ')
+        : 'Sin toppings adicionales';
+
+      const currentSize = customizerData.sizes.find(s => s.id === customState.selectedSize);
+      const total = currentSize.price * customState.quantity;
+
+      const detailsEl = document.getElementById('modal-order-details');
+      if (detailsEl) {
+        detailsEl.innerHTML = `
+          <div style="margin-bottom: 5px;"><strong>🥭 Fruta(s):</strong> ${fruitNames}</div>
+          <div style="margin-bottom: 5px;"><strong>🌶️ Toppings:</strong> ${toppingNames}</div>
+          <div style="margin-bottom: 5px;"><strong>📏 Tamaño:</strong> ${currentSize.name} (${formatCOP(currentSize.price)})</div>
+          <div style="margin-bottom: 5px;"><strong>🔢 Cantidad:</strong> ${customState.quantity}</div>
+          <div style="margin-top: 8px; padding-top: 6px; border-top: 1px solid rgba(74,25,66,0.1); font-size: 1.05rem; font-weight: 900; color: var(--purple-dark);">
+            Total: ${formatCOP(total)}
+          </div>
+        `;
+      }
+
+      document.getElementById('successModal').classList.add('open');
+    }
+
+    function closeSuccessModal() {
+      document.getElementById('successModal').classList.remove('open');
+    }
+
+    /* ═══════ FOOTER TEMPLATE ═══════ */
+    const footerHTML = `
+      <div class="footer-grid">
+        <div>
+          <h3 style="font-size:1.25rem;font-weight:900;margin-bottom:10px;color:var(--lime)">TYANGO</h3>
+          <p style="color:var(--purple-light);font-size:0.82rem;line-height:1.6">Frescura, sabor y energía en cada producto.</p>
+        </div>
+        <div>
+          <h4 style="font-weight:800;margin-bottom:10px;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--lime)">Menú</h4>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <a href="#" onclick="navigate('hot')">TYHOT</a>
+            <a href="#" onclick="navigate('ice')">TYICE</a>
+            <a href="#" onclick="navigate('bowls')">TYBOWLS</a>
+            <a href="#" onclick="navigate('azuca')">TYAZUCA</a>
+          </div>
+        </div>
+        <div>
+          <h4 style="font-weight:800;margin-bottom:10px;font-size:0.75rem;letter-spacing:0.08em;text-transform:uppercase;color:var(--lime)">Síguenos</h4>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <a href="#">📸 Instagram</a>
+            <a href="#">📍 Ubicación</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p style="color:var(--purple-light);font-size:0.74rem">© 2026 Tyango. Todos los derechos reservados 💜</p>
+      </div>`;
+
+    /* ═══════ RENDER CARDS ═══════ */
+    function renderGrid(gridId, items) {
+      const grid = document.getElementById(gridId);
+      if (!grid) return;
+      grid.innerHTML = '';
+      items.forEach((item, i) => {
+        const card = document.createElement('article');
+        card.className = 'card';
+        card.setAttribute('role', 'article');
+        const mediaContent = item.img 
+          ? `<img src="${item.img}" alt="${item.name}" class="card-photo" loading="lazy">` 
+          : `<span class="card-emoji" aria-hidden="true">${item.emoji}</span>`;
+        card.innerHTML = `
+          <div class="card-img" style="${item.bg ? 'background:' + item.bg : ''}">
+            ${mediaContent}
+          </div>
+          <div class="card-body">
+            ${item.badge ? `<span class="card-badge" style="${item.badgeCss}">${item.badge}</span>` : ''}
+            <h3 class="card-name">${item.name}</h3>
+            <p class="card-desc">${item.desc}</p>
+            <span class="card-price">${item.price}</span>
+          </div>`;
+        grid.appendChild(card);
+        setTimeout(() => card.classList.add('show'), 40 + i * 80);
+      });
+    }
+
+    /* ═══════ NAVEGACIÓN ENTRE PÁGINAS ═══════ */
+    let currentPage = 'home';
+
+    function navigate(page) {
+      if (page === currentPage) return;
+
+      // Cerrar menús
+      closeMobileDrawer();
+      const secondary = document.getElementById('secondaryMenu');
+      if (secondary) secondary.classList.remove('open');
+
+      // Ocultar página actual
+      const cur = document.getElementById('page-' + currentPage);
+      if (cur) {
+        cur.classList.remove('visible');
+        setTimeout(() => cur.classList.remove('active'), 250);
+      }
+
+      currentPage = page;
+      const next = document.getElementById('page-' + page);
+
+      if (next) {
+        setTimeout(() => {
+          next.classList.add('active');
+          window.scrollTo({ top: 0, behavior: 'instant' });
+
+          // Re-animar tarjetas
+          if (page !== 'home') {
+            next.querySelectorAll('.card').forEach((c, i) => {
+              c.classList.remove('show');
+              setTimeout(() => c.classList.add('show'), 40 + i * 80);
+            });
+          }
+
+          if (page === 'home') {
+            document.querySelectorAll('#grid-favs .card').forEach((c, i) => {
+              c.classList.remove('show');
+              setTimeout(() => c.classList.add('show'), 40 + i * 80);
+            });
+          }
+
+          requestAnimationFrame(() => next.classList.add('visible'));
+        }, 260);
+      }
+
+      // Marcar botón activo en header Desktop
+      document.querySelectorAll('.header-nav-btn').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.page === page)
+      );
+
+      // Marcar botón activo en Drawer Móvil
+      document.querySelectorAll('.drawer-nav-item').forEach(btn =>
+        btn.classList.toggle('active', btn.dataset.page === page)
+      );
+    }
+
+    /* ═══════ CONTROL DE MENÚ / DRAWER (☰) ═══════ */
+    function toggleMenu() {
+      if (window.innerWidth <= 768) {
+        // En móvil abre el Drawer
+        const drawer = document.getElementById('mobileDrawer');
+        const backdrop = document.getElementById('drawerBackdrop');
+        const btn = document.querySelector('.header-hamburger');
+        const isOpen = drawer.classList.toggle('open');
+        backdrop.classList.toggle('open', isOpen);
+        document.body.style.overflow = isOpen ? 'hidden' : '';
+        if (btn) btn.setAttribute('aria-expanded', isOpen);
+      } else {
+        // En desktop abre el dropdown
+        const menu = document.getElementById('secondaryMenu');
+        const btn = document.querySelector('.header-hamburger');
+        if (menu) {
+          const isOpen = menu.classList.toggle('open');
+          if (btn) btn.setAttribute('aria-expanded', isOpen);
+        }
+      }
+    }
+
+    function closeMobileDrawer() {
+      const drawer = document.getElementById('mobileDrawer');
+      const backdrop = document.getElementById('drawerBackdrop');
+      const btn = document.querySelector('.header-hamburger');
+      if (drawer) drawer.classList.remove('open');
+      if (backdrop) backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    }
+
+    // Cerrar al hacer clic fuera en desktop
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth > 768) {
+        const menu = document.getElementById('secondaryMenu');
+        const hamburger = document.querySelector('.header-hamburger');
+        if (menu && hamburger && !menu.contains(e.target) && !hamburger.contains(e.target)) {
+          menu.classList.remove('open');
+          hamburger.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
+
+    // Cerrar con tecla Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeMobileDrawer();
+        const menu = document.getElementById('secondaryMenu');
+        if (menu) menu.classList.remove('open');
+      }
+    });
+
+    /* ═══════ SCROLL SHADOW ═══════ */
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      if (header) header.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    /* ═══════ INICIALIZACIÓN ═══════ */
+    document.addEventListener('DOMContentLoaded', () => {
+      renderGrid('grid-hot', catalog.hot);
+      renderGrid('grid-ice', catalog.ice);
+      renderGrid('grid-bowls', catalog.bowls);
+      renderGrid('grid-azuca', catalog.azuca);
+      renderGrid('grid-favs', favorites);
+      renderCustomizer();
+
+      ['home','hot','ice','bowls','azuca'].forEach(cat => {
+        const el = document.getElementById('footer-' + cat);
+        if (el) el.innerHTML = footerHTML;
+      });
+    });
+  </script>
+
+</body>
+</html>
